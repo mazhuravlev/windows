@@ -1,0 +1,29 @@
+.preview-container {
+  display: grid;
+  /* grid-column-gap: 10px;
+  grid-row-gap: 10px; */
+  justify-items: center;
+  align-items: center;
+  grid-template-areas:
+    "sector1 sector2 sector3 sector4 sector5"
+    "sector6 window1 sector7 window2 sector8"
+    "sector9 sector10 sector11 sector12 sector13"
+}
+
+.preview-container .window1 {
+  grid-area: window1;
+  background-color: darkolivegreen;
+  /* margin-top: 10px; */
+}
+
+.preview-container .window2 {
+  grid-area: window2;
+  background-color: darkolivegreen;
+  /* margin-top: 10px; */
+}
+
+.preview-container .preview-container-item {
+  background-color: red;
+  border: 2px solid black;
+  /* margin-bottom: 20px; */
+}
