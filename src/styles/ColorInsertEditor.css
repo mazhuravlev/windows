@@ -1,14 +1,14 @@
 /* ColorInsertEditor styles */
 
-.container {
+.app-container {
   /* width: 800px; */
   height: 600px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 0;
   background-color: gray;
 
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: 400px 400px;
   grid-template-rows: auto;
   grid-template-areas:
     "options preview";
@@ -16,16 +16,27 @@
   align-items: center;
 }
 
-.container .options {
+.app-container .container-item {
+  margin-bottom: 10px;
+}
+
+.app-container .options {
   grid-area: options;
   background-color: aqua;
 }
 
-.container .preview {
+.app-container .preview {
   grid-area: preview;
   background-color: lightgreen;
 }
 
-.container .window {
+.app-container .window {
   background-color: blue;
+}
+
+/* Window Size */
+
+.window-size-container {
+  display: flex;
+  justify-content: space-around;
 }

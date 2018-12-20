@@ -1,0 +1,57 @@
+.static-preview-container {
+  display: grid;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas:
+    "sector1 sector2 sector3 sector4 sector5"
+    "sector6 window1 sector7 window2 sector8"
+    "sector9 sector10 sector11 sector12 sector13"
+}
+
+.static-preview-container .window1 {
+  grid-area: window1;
+  background-color: lightsteelblue;
+}
+
+.static-preview-container .window2 {
+  grid-area: window2;
+  background-color: lightsteelblue;
+}
+
+.static-preview-container .preview-container-item {
+  background-color: gray;
+  border: 2px solid darkslategray;
+  margin: 2px;
+}
+
+.static-preview-container .preview-container-item:nth-child(odd) {
+  border-radius: 15%;
+}
+
+.static-preview-container .preview-container-item:nth-child(7) {
+  border-radius: 0;
+}
+
+.static-preview-container .preview-container-item:hover {
+  border: 2px solid black;
+}
+
+.static-preview-container .sector3 {
+  height: 20px;
+}
+
+.static-preview-container .sector6 {
+  width: 20px;
+}
+
+.static-preview-container .sector7 {
+  width: 20px;
+}
+
+.static-preview-container .sector8 {
+  width: 20px;
+}
+
+.static-preview-container .sector11 {
+  height: 20px;
+}

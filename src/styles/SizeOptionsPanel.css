@@ -1,0 +1,33 @@
+/* SizeOptionsPanel style */
+.container-window-options {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    ". topSide ."
+    "leftSide preview rightSide"
+    ". bottomSide .";
+    justify-items: center;
+    align-items: center;
+  
+  margin-bottom: 10px;  
+}
+
+/* Side options style */
+
+.side-options-container {
+  display: flex;
+}
+
+.side-options-container-item {
+  margin-right: 3px;
+}
+
+.side-options-container-item input,
+.side-options-container-item label  {
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  width: 40px;
+  height: 20px;
+}

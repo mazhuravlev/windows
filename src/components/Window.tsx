@@ -1,18 +1,22 @@
 import * as React from 'react';
 
 import { buildSizeStyleObj } from '../helpers';
+import { INumObjType, ISize } from '../interface';
 
-interface InjectedProps {
-  width: number;
-  height: number;
+interface InjectedProps extends ISize {
   step: number;
+  margin: INumObjType;
 }
 
-// tslint:disable-next-line:variable-name
 const Window = (props: InjectedProps & React.HTMLProps<HTMLDivElement>) => {
-  const { step, className, ...size } = props;
+  const { step, className, margin, width, height } = props;
+
+  const syleObj = {
+    ...buildSizeStyleObj({ width, height }, step),
+    ...buildSizeStyleObj(margin, step),
+  };
   return (
-    <div style={buildSizeStyleObj(size, step)} className={className} />
+    <div style={syleObj} className={className} />
   );
 };
 
