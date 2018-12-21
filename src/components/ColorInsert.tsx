@@ -7,7 +7,7 @@ import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/StaticPreview.css';
 
-import { ISectorList, ISideSize } from '../interface';
+import { ISectorList, ISideSize, ITextureList } from '../interface';
 import { IStore } from '../store';
 
 import Preview from './Preview';
@@ -20,8 +20,8 @@ interface IState {
 }
 
 interface IProps {
-  // window: IWindowSize;
   side: ISideSize;
+  textureList: ITextureList;
 }
 
 const initSectorList = () : ISectorList => {
@@ -36,12 +36,8 @@ const initSectorList = () : ISectorList => {
 class ColorInsert extends React.Component< IProps, IState > {
   public state: IState = {
     sectorList: initSectorList(),
-    step: 20,
+    step: 15,
   };
-
-  public handleClick = (sectorId: string) => () => {
-    console.log(sectorId);
-  }
 
   public render() {
     return (
@@ -59,13 +55,13 @@ class ColorInsert extends React.Component< IProps, IState > {
           <Preview
             {...this.state}
             {...this.props}
-            window={{ width: 8, height: 4, padding: 2 }}
+            window={{ width: 12, height: 6, padding: 4 }}
             className="preview-container"
           />
           <Preview
             {...this.state}
             {...this.props}
-            window={{ width: 9, height: 4, padding: 0 }}
+            window={{ width: 13, height: 6, padding: 0 }}
             className="preview-container"
           />
         </div>
@@ -75,8 +71,8 @@ class ColorInsert extends React.Component< IProps, IState > {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  // window: state.window,
   side: state.side,
+  textureList: state.textureList,
 });
 
 const ColorInsertEditor = connect(mapStateToProps)(ColorInsert);

@@ -1,28 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ISectorList, ISideSize, ITextureList } from '../interface';
+import { ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList } from '../interface';
+
 import * as sideEnteties from '../redux/side';
+import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
 
 import '../styles/SizeOptionsPanel.css';
 
 import SideOption from './SideOption';
 import StaticPreview from './StaticPreview';
-// import WindowSize from './WindowSize';
-
-const staticSide = {
-  bottomWidth: 1,
-  bottomMargin: 0,
-  leftWidth: 1,
-  leftMargin: 0,
-  middleWidth: 1,
-  middleMargin: 0,
-  rightWidth: 1,
-  rightMargin: 0,
-  topWidth: 1,
-  topMargin: 0,
-};
 
 interface IState {
   test: string;
@@ -32,8 +20,10 @@ interface IProps {
   sectorList: ISectorList;
   step: number;
   side: ISideSize;
+  texture: ITexture;
   textureList: ITextureList;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
+  addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
 
 export class SizeOptionsPanel extends React.Component<IProps, IState> {
@@ -48,13 +38,13 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
   }
 
   public handleClick = (sectorId: string) => () => {
-    console.log(sectorId);
+    const { texture } = this.props;
+    this.props.addTextureItem({ sectorId, ...texture });
   }
 
   public render() {
     return (
       <div>
-        {/* <WindowSize /> */}
         <div className="container-window-options">
           <SideOption
             side={this.props.side}
@@ -77,27 +67,10 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
             handleInput={this.handleInput}
             style={{ gridArea: 'bottomSide', flexDirection: 'row' }}
             sideName="bottom" />
-          {/* <SideOption
-            side={this.props.side}
-            handleInput={this.handleInput}
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginLeft: '-55px',
-              marginTop: '-22px',
-              width: '110px',
-            }}
-            sideName="middle"
-          /> */}
           <StaticPreview
-            side={staticSide}
             style={{ gridArea: 'preview' }}
             sectorList={this.props.sectorList}
             step={this.props.step}
-            window={{ width: 8, height: 4, padding: 4 }}
             className="static-preview-container"
             handleClick={this.handleClick}
           />
@@ -113,8 +86,10 @@ const mapStateToProps = (state: IStore) => ({
   textureList: state.textureList,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<sideEnteties.SideAction>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   setSideSize: (size: sideEnteties.ISideSetType) => dispatch(sideEnteties.setSideSize(size)),
+  addTextureItem: (sectorTexture: ISectorTexture) =>
+    dispatch(textureListEnteties.addTextureItem(sectorTexture)),
 });
 
 const SideSize = connect(mapStateToProps, mapDispatchToProps)(SizeOptionsPanel);

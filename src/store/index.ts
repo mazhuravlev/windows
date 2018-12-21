@@ -4,10 +4,8 @@ import rootReducers from '../redux';
 import { ISideState } from '../redux/side';
 import { ITextureState } from '../redux/texture';
 import { ITextureListState } from '../redux/textureList';
-import { IWindowState } from '../redux/window';
 
 export interface IStore {
-  window: IWindowState;
   side: ISideState;
   texture: ITextureState;
   textureList: ITextureListState;

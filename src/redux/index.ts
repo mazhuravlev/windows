@@ -5,11 +5,8 @@ import sideReducers from './side';
 import textureReducers from './texture';
 // tslint:disable-next-line:import-name
 import textureListReducers from './textureList';
-// tslint:disable-next-line:import-name
-import windowReducers from './window';
 
 export default combineReducers({
-  window: windowReducers,
   side: sideReducers,
   texture: textureReducers,
   textureList: textureListReducers,

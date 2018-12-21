@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sector from './Sector';
 import Window from './Window';
 
-import { INumObjType, ISectorList, ISideSize, IWindowSize } from '../interface';
+import { INumObjType, ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
 
 const getSectorSize = (side: ISideSize, sector: number, padding: number): INumObjType => {
   switch (sector) {
@@ -71,6 +71,7 @@ interface IProps {
   step: number;
   window: IWindowSize;
   side: ISideSize;
+  textureList: ITextureList;
 }
 
 const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
@@ -111,6 +112,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
                 `preview-container-item sector${sectorNumber}`}
               sectorSize={size}
               gridArea={shiftGridPosition(sectorNumber, window.padding)}
+              textureList={props.textureList}
             />
           );
         })

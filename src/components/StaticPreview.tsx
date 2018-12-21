@@ -1,9 +1,22 @@
 import * as React from 'react';
 
 import { buildSizeStyleObj } from '../helpers';
-import { INumObjType, ISectorList, ISideSize, IWindowSize } from '../interface';
+import { INumObjType, ISectorList } from '../interface';
 
-const getSectorSize = (side: ISideSize, sector: number, padding: number): INumObjType => {
+const side = {
+  bottomWidth: 1,
+  bottomMargin: 0,
+  leftWidth: 1,
+  leftMargin: 0,
+  middleWidth: 1,
+  middleMargin: 0,
+  rightWidth: 1,
+  rightMargin: 0,
+  topWidth: 1,
+  topMargin: 0,
+};
+
+const getSectorSize = (sector: number): INumObjType => {
   switch (sector) {
     case 1: {
       return { width: side.leftWidth };
@@ -51,20 +64,18 @@ const getSectorSize = (side: ISideSize, sector: number, padding: number): INumOb
 interface IProps {
   sectorList: ISectorList;
   step: number;
-  window: IWindowSize;
-  side: ISideSize;
   handleClick: (sectorId: string) => () => void;
 }
 
 const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
-  const { sectorList, step, className, window, side, handleClick } = props;
+  const { sectorList, step, className, handleClick } = props;
   return (
     <div style={props.style} className={className}>
       {
         Object.keys(sectorList).map((key) => {
           const sector = sectorList[key];
           const sectorNumber = Number(key);
-          const size = getSectorSize(side, sectorNumber, window.padding);
+          const size = getSectorSize(sectorNumber);
           const objStyle = {
             gridArea: `sector${key}`,
             ...buildSizeStyleObj(size, step),
