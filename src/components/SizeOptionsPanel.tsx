@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ISectorList, ISideSize } from '../interface';
+import { ISectorList, ISideSize, ITextureList } from '../interface';
 import * as sideEnteties from '../redux/side';
 import { IStore } from '../store';
 
 import '../styles/SizeOptionsPanel.css';
 
-import Preview from './Preview';
 import SideOption from './SideOption';
+import StaticPreview from './StaticPreview';
 // import WindowSize from './WindowSize';
 
 const staticSide = {
@@ -32,6 +32,7 @@ interface IProps {
   sectorList: ISectorList;
   step: number;
   side: ISideSize;
+  textureList: ITextureList;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
 }
 
@@ -44,6 +45,10 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
     const { setSideSize } = this.props;
     const name = sideName as sideEnteties.SideItemType;
     setSideSize({ name, value: Number(event.currentTarget.value) });
+  }
+
+  public handleClick = (sectorId: string) => () => {
+    console.log(sectorId);
   }
 
   public render() {
@@ -87,13 +92,14 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
             }}
             sideName="middle"
           /> */}
-          <Preview
+          <StaticPreview
             side={staticSide}
             style={{ gridArea: 'preview' }}
             sectorList={this.props.sectorList}
             step={this.props.step}
             window={{ width: 8, height: 4, padding: 4 }}
             className="static-preview-container"
+            handleClick={this.handleClick}
           />
         </div>
       </div>
@@ -103,6 +109,8 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
 
 const mapStateToProps = (state: IStore) => ({
   side: state.side,
+  texture: state.texture,
+  textureList: state.textureList,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<sideEnteties.SideAction>) => ({

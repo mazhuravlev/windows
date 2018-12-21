@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+
 import * as textureEnteties from '../redux/texture';
 import { IStore } from '../store';
 
@@ -35,7 +36,7 @@ class Texture extends React.Component<IProps> {
     }
 
     return (
-      <div className="previewComponent">
+      <div className="texture-panel-container">
         <input className="fileInput"
           type="file"
           onChange={this.handleImageChange}

@@ -16,6 +16,14 @@ export interface ITexture {
   fileName: string;
 }
 
+export interface ISectorTexture extends ITexture {
+  sectorId: string;
+}
+
+export interface ITextureList {
+  [secotId: string]: ISectorTexture;
+}
+
 export interface ISize {
   width: number;
   height: number;

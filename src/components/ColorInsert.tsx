@@ -39,6 +39,10 @@ class ColorInsert extends React.Component< IProps, IState > {
     step: 20,
   };
 
+  public handleClick = (sectorId: string) => () => {
+    console.log(sectorId);
+  }
+
   public render() {
     return (
       <div className="app-container">
