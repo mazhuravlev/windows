@@ -7,12 +7,13 @@ interface IProps {
   sector: ISector;
   step: number;
   sectorSize: INumObjType;
+  gridArea: number;
 }
 
 const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
-  const { sector, className, step, sectorSize } = props;
+  const { sector, className, step, sectorSize, gridArea } = props;
   const objStyle = {
-    gridArea: `sector${sector.id}`,
+    gridArea: `sector${gridArea}`,
     ...buildSizeStyleObj(sectorSize, step),
   };
   return (

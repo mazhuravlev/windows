@@ -1,9 +1,9 @@
 /* ColorInsertEditor styles */
 
 .app-container {
-  /* width: 800px; */
+  width: 800px;
   height: 600px;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   padding: 0;
   background-color: gray;
 
@@ -28,6 +28,7 @@
 .app-container .preview {
   grid-area: preview;
   background-color: lightgreen;
+  align-self: center;
 }
 
 .app-container .window {

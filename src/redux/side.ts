@@ -7,15 +7,15 @@ import { ISideSize } from '../interface';
 export type ISideState = ISideSize;
 const initState: ISideState = {
   bottomWidth: 1,
-  bottomMargin: 1,
+  bottomMargin: 0,
   leftWidth: 1,
-  leftMargin: 1,
+  leftMargin: 0,
   middleWidth: 1,
-  middleMargin: 1,
+  middleMargin: 0,
   rightWidth: 1,
-  rightMargin: 1,
+  rightMargin: 0,
   topWidth: 1,
-  topMargin: 1,
+  topMargin: 0,
 };
 
 /*

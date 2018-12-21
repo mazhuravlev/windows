@@ -1,10 +1,8 @@
+import { ITexture } from '../interface';
 /*
     STATE
 */
-export interface ITextureState {
-  url: string;
-  fileName: string;
-}
+export type ITextureState = ITexture;
 
 const initState = {
   url: '',

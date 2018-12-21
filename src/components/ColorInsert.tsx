@@ -7,7 +7,7 @@ import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/StaticPreview.css';
 
-import { ISectorList, ISideSize, IWindowSize } from '../interface';
+import { ISectorList, ISideSize } from '../interface';
 import { IStore } from '../store';
 
 import Preview from './Preview';
@@ -20,7 +20,7 @@ interface IState {
 }
 
 interface IProps {
-  window: IWindowSize;
+  // window: IWindowSize;
   side: ISideSize;
 }
 
@@ -55,6 +55,13 @@ class ColorInsert extends React.Component< IProps, IState > {
           <Preview
             {...this.state}
             {...this.props}
+            window={{ width: 8, height: 4, padding: 2 }}
+            className="preview-container"
+          />
+          <Preview
+            {...this.state}
+            {...this.props}
+            window={{ width: 9, height: 4, padding: 0 }}
             className="preview-container"
           />
         </div>
@@ -64,7 +71,7 @@ class ColorInsert extends React.Component< IProps, IState > {
 }
 
 const mapStateToProps = (state: IStore) => ({
-  window: state.window,
+  // window: state.window,
   side: state.side,
 });
 

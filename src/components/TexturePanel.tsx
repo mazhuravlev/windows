@@ -16,10 +16,6 @@ class Texture extends React.Component<IProps> {
     const reader = new FileReader();
     const file = event.target.files[0];
     reader.onloadend = () => {
-      // this.setState({
-      //   file,
-      //   imagePreviewUrl: reader.result,
-      // });
       this.props.setTextureUrl({
         url: reader.result as string,
         fileName: file.name,

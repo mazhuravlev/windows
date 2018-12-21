@@ -11,9 +11,9 @@ export interface IWindowState {
 }
 
 const initState: IWindowState = {
-  width: 7,
-  height: 5,
-  padding: 2,
+  width: 8,
+  height: 7,
+  padding: 3,
 };
 
 /*

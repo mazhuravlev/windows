@@ -11,6 +11,11 @@ export interface ISectorList {
   [id: string]: ISector;
 }
 
+export interface ITexture {
+  url: string;
+  fileName: string;
+}
+
 export interface ISize {
   width: number;
   height: number;

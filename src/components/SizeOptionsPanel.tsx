@@ -9,7 +9,7 @@ import '../styles/SizeOptionsPanel.css';
 
 import Preview from './Preview';
 import SideOption from './SideOption';
-import WindowSize from './WindowSize';
+// import WindowSize from './WindowSize';
 
 const staticSide = {
   bottomWidth: 1,
@@ -49,7 +49,7 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
   public render() {
     return (
       <div>
-        <WindowSize />
+        {/* <WindowSize /> */}
         <div className="container-window-options">
           <SideOption
             side={this.props.side}
@@ -72,7 +72,7 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
             handleInput={this.handleInput}
             style={{ gridArea: 'bottomSide', flexDirection: 'row' }}
             sideName="bottom" />
-          <SideOption
+          {/* <SideOption
             side={this.props.side}
             handleInput={this.handleInput}
             style={{
@@ -86,7 +86,7 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
               width: '110px',
             }}
             sideName="middle"
-          />
+          /> */}
           <Preview
             side={staticSide}
             style={{ gridArea: 'preview' }}
