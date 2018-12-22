@@ -17,18 +17,18 @@
 
 .preview-container .window1 {
   grid-area: window1;
-  background-color: darkolivegreen;
+  background-color: darkgray;
   margin: 10px;
 }
 
 .preview-container .window2 {
   grid-area: window2;
-  background-color: darkolivegreen;
+  background-color: darkgray;
   margin: 10px;
 }
 
 .preview-container .preview-container-item {
-  background-color: red;
+  background-color: darkslategray;
   /* border: 2px solid black; */
 }
 

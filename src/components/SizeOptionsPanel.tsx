@@ -31,10 +31,10 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
     test: '',
   };
 
-  public handleInput = (sideName: string) => (event: React.FormEvent<HTMLInputElement>) => {
+  public handleInput = (sideName: string) => (value: number) => {
     const { setSideSize } = this.props;
     const name = sideName as sideEnteties.SideItemType;
-    setSideSize({ name, value: Number(event.currentTarget.value) });
+    setSideSize({ name, value });
   }
 
   public handleClick = (sectorId: string) => () => {

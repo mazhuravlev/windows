@@ -33,7 +33,7 @@ const initSectorList = () : ISectorList => {
   return sectorList;
 };
 
-class ColorInsert extends React.Component< IProps, IState > {
+class ColorInsert extends React.Component<IProps, IState> {
   public state: IState = {
     sectorList: initSectorList(),
     step: 15,
@@ -49,7 +49,7 @@ class ColorInsert extends React.Component< IProps, IState > {
             step={this.state.step}
           />
           <Button block={true} color="primary">Save</Button>
-          <Button block={true}>Cancel</Button>
+          <Button className="mb-1" block={true}>Cancel</Button>
         </div>
         <div className="container-item preview">
           <Preview

@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { ISectorTexture, ITextureList } from '../interface';
 
 /*
@@ -42,8 +43,7 @@ export default function reducer(state: ITextureListState = {},
       return { ...state, [sectorTexture.sectorId]: sectorTexture };
     }
     case REMOVE: {
-      return {
-      };
+      return _.omit(state, action.payload.sectorId);
     }
     default:
       return state;

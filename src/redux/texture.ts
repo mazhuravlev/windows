@@ -7,6 +7,8 @@ export type ITextureState = ITexture;
 const initState = {
   url: '',
   fileName: '',
+  VOffset: 0,
+  HOffset: 0,
 };
 
 /*
@@ -34,8 +36,7 @@ export default function reducer(state: ITextureState = initState, action: Textur
   : ITextureState {
   switch (action.type) {
     case SET: {
-      const { url, fileName } = action.payload;
-      return { url, fileName };
+      return { ...action.payload };
     }
     default:
       return state;

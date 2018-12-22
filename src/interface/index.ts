@@ -14,6 +14,8 @@ export interface ISectorList {
 export interface ITexture {
   url: string;
   fileName: string;
+  HOffset: number;
+  VOffset: number;
 }
 
 export interface ISectorTexture extends ITexture {
@@ -48,4 +50,8 @@ export interface ISideSize {
 
 export interface INumObjType {
   [name: string]: number;
+}
+
+export interface IStyleObj {
+  [key: string]: string | number;
 }

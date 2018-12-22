@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Input, Label } from 'reactstrap';
+import { UncontrolledTooltip } from 'reactstrap';
 
 import { ISideSize } from '../interface';
+import NumberInput from './NumberInput';
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
   sideName: string;
   side: ISideSize;
   handleInput: (sideName: string) =>
-    (event: React.FormEvent<HTMLInputElement>) => void;
+    (value: number) => void;
 }
 
 const SideOption = (props: IProps) => {
@@ -15,23 +16,25 @@ const SideOption = (props: IProps) => {
   return (
     <div style={props.style} className="side-options-container">
       <div className="side-options-container-item">
-        <Label for={`${sideName}-width`}>w</Label>
-        <Input
+        <UncontrolledTooltip target={`${sideName}-width`}>Ширина</UncontrolledTooltip>
+        <NumberInput
           id={`${sideName}-width`}
-          type="number"
-          name="width"
-          onChange={handleInput(`${sideName}Width`)}
+          style={{ position: 'relative' }}
           value={side[`${sideName}Width`]}
+          min={1}
+          max={10}
+          onChange={handleInput(`${sideName}Width`)}
         />
       </div>
       <div className="side-options-container-item">
-        <Label for={`${sideName}-margin`}>p</Label>
-        <Input
+        <UncontrolledTooltip target={`${sideName}-margin`}>Отступ</UncontrolledTooltip>
+        <NumberInput
           id={`${sideName}-margin`}
-          type="number"
-          name="margin"
-          onChange={handleInput(`${sideName}Margin`)}
+          style={{ position: 'relative' }}
           value={side[`${sideName}Margin`]}
+          min={0}
+          max={10}
+          onChange={handleInput(`${sideName}Margin`)}
         />
       </div>
     </div>

@@ -1,38 +1,29 @@
 /* ColorInsertEditor styles */
 
 .app-container {
-  width: 800px;
-  height: 600px;
+  width: 600px;
+  /* height: 600px; */
   margin: 0 auto;
   padding: 0;
-  background-color: gray;
 
   display: grid;
-  grid-template-columns: 400px 400px;
+  grid-template-columns: 300px 300px;
   grid-template-rows: auto;
   grid-template-areas:
     "options preview";
   justify-items: center;
   align-items: center;
-}
-
-.app-container .container-item {
-  margin-bottom: 10px;
+  border: 2px solid gray;
 }
 
 .app-container .options {
   grid-area: options;
-  background-color: aqua;
+  background-color: lightsteelblue;
 }
 
 .app-container .preview {
   grid-area: preview;
-  background-color: lightgreen;
   align-self: center;
-}
-
-.app-container .window {
-  background-color: blue;
 }
 
 /* Window Size */

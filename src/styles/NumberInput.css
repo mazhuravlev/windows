@@ -1,0 +1,28 @@
+ .number-input {
+    user-select: none;
+    display: block;
+    height: 26px;
+    width: 46px;
+    margin: 0 6px 0 4px;
+    border: 1px solid lightgray;
+ }
+
+ .number-input div {
+     display: inline-block;
+ }
+ 
+ .number-input .val {
+    width: 20px;
+    text-align: center;
+}
+
+ .number-input .ctl {
+    background-color: lightgray;
+    width: 12px;
+    text-align: center;
+    cursor: pointer;
+ }
+
+ .number-input .ctl:hover {
+    background-color: gray;
+ }
