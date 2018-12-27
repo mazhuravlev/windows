@@ -2,57 +2,9 @@ import * as React from 'react';
 import Sector from './Sector';
 import Window from './Window';
 
-import { INumObjType, ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
-
-const getSectorSize = (side: ISideSize, sector: number, padding: number): INumObjType => {
-  switch (sector) {
-    case 1: {
-      return { width: side.leftWidth };
-    }
-    case 2: {
-      return { height: side.topWidth };
-    }
-    case 3: {
-      const height = padding === 0 ? 0 : side.topWidth;
-      return { height };
-    }
-    case 4: {
-      const height = padding === 0 ? 0 : side.topWidth;
-      return { height };
-    }
-    case 5: {
-      return { width: side.rightWidth };
-    }
-    case 6: {
-      return { width: side.leftWidth };
-    }
-    case 7: {
-      const width = padding === 0 ? 0 : side.middleWidth;
-      return { width };
-    }
-    case 8: {
-      return { width: side.rightWidth };
-    }
-    case 9: {
-      return { width: side.leftWidth };
-    }
-    case 10: {
-      return { height: side.bottomWidth };
-    }
-    case 11: {
-      const height = padding === 0 ? 0 : side.bottomWidth;
-      return { height };
-    }
-    case 12: {
-      const height = padding === 0 ? 0 : side.bottomWidth;
-      return { height };
-    }
-    case 13: {
-      return { width: side.rightWidth };
-    }
-    default: return {};
-  }
-};
+import { getSectorSize } from 'src/helpers';
+import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
+import { BRICK, DOUBLE_WINDOW, TILE, WINDOW } from '../static';
 
 const shiftGridPosition = (sector: number, paddind: number): number => {
   if (paddind === 0) {
@@ -66,16 +18,51 @@ const shiftGridPosition = (sector: number, paddind: number): number => {
   return sector;
 };
 
+const getStepSize = (textureType: string): number => {
+  switch (textureType) {
+    case BRICK: return 15;
+    case TILE: return 20;
+    default: return 0;
+  }
+};
+
+const getWindowSize = (textureType: string, windowType: string): IWindowSize => {
+  // for double width = 32- padding - sector7Width
+  if (textureType === BRICK && windowType === WINDOW) {
+    return { width: 32, height: 24, padding: 0 };
+  }
+  if (textureType === BRICK && windowType === DOUBLE_WINDOW) {
+    return { width: 28, height: 24, padding: 8 };
+  }
+  if (textureType === TILE && windowType === WINDOW) {
+    return { width: 24, height: 18, padding: 0 };
+  }
+  // DOUBLE_WINDOW and TILE (default)
+  return { width: 21, height: 18, padding: 6 };
+};
+
+const getSector7Width = (textureType: string): number => {
+  switch (textureType) {
+    case BRICK: return 4;
+    case TILE: return 3;
+    default: return 0;
+  }
+};
+
 interface IProps {
   sectorList: ISectorList;
-  step: number;
-  window: IWindowSize;
+  textureType: string;
+  windowType: string;
   side: ISideSize;
   textureList: ITextureList;
+  currentSector: number;
+  handleClick: (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => void;
 }
 
 const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
-  const { sectorList, step, className, window, side } = props;
+  const { sectorList, className, side, handleClick, textureType, windowType } = props;
+  const step = getStepSize(textureType);
+  const window = getWindowSize(textureType, windowType);
   const sizeWindow1 = {
     width: window.width - window.padding,
     height: window.height,
@@ -96,13 +83,14 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
     marginLeft: side.middleMargin,
     marginBottom: side.bottomMargin,
   };
+  const sector7Width = getSector7Width(textureType);
   return (
     <div style={props.style} className={className}>
       {
         Object.keys(sectorList).map((key) => {
           const sector = sectorList[key];
           const sectorNumber = Number(key);
-          const size = getSectorSize(side, sectorNumber, window.padding);
+          const size = getSectorSize(side, sectorNumber, window.padding, sector7Width);
           return (
             <Sector
               key={sector.id}
@@ -111,8 +99,10 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               className={
                 `preview-container-item sector${sectorNumber}`}
               sectorSize={size}
-              gridArea={shiftGridPosition(sectorNumber, window.padding)}
+              currentSector={props.currentSector}
               textureList={props.textureList}
+              onClick={handleClick(sector.id)}
+              gridArea={shiftGridPosition(sectorNumber, window.padding)}
             />
           );
         })

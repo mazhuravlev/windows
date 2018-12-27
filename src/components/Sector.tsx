@@ -9,14 +9,19 @@ interface IProps {
   sectorSize: INumObjType;
   gridArea: number;
   textureList: ITextureList;
+  currentSector: number;
 }
 
 const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
-  const { sector, className, step, sectorSize, gridArea, textureList } = props;
+  const { sector, className, step, sectorSize, gridArea, textureList, onClick, currentSector } = props;
 
+  const boxShadow = 'inset 0px 0px 0px 2px red';
+  // console.log(currentSector, sector.id);
+  // console.log(currentSector === Number(sector.id));
   let styleObj: IStyleObj = {
     gridArea: `sector${gridArea}`,
     ...buildSizeStyleObj(sectorSize, step),
+    boxShadow: currentSector === Number(sector.id) ? boxShadow : '',
   };
 
   if (textureList[sector.id]) {
@@ -33,6 +38,7 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
       key={sector.id}
       style={{ ...styleObj }}
       className={className}
+      onClick={onClick}
     >
       {''}
     </div>

@@ -7,8 +7,9 @@ import { ITextureListState } from '../redux/textureList';
 
 export interface IStore {
   side: ISideState;
-  texture: ITextureState;
   textureList: ITextureListState;
+  currentSector: number;
+  texture: ITextureState;
 }
 
 const configureStore = (initialState?: IStore) => {

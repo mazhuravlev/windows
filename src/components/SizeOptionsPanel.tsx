@@ -1,45 +1,25 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList } from '../interface';
+import { ISideSize } from '../interface';
 
 import * as sideEnteties from '../redux/side';
-import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
 
 import '../styles/SizeOptionsPanel.css';
 
 import SideOption from './SideOption';
-import StaticPreview from './StaticPreview';
-
-interface IState {
-  test: string;
-}
 
 interface IProps {
-  sectorList: ISectorList;
-  step: number;
   side: ISideSize;
-  texture: ITexture;
-  textureList: ITextureList;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
-  addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
 
-export class SizeOptionsPanel extends React.Component<IProps, IState> {
-  public state: IState = {
-    test: '',
-  };
+export class SizeOptionsPanel extends React.Component<IProps> {
 
   public handleInput = (sideName: string) => (value: number) => {
     const { setSideSize } = this.props;
     const name = sideName as sideEnteties.SideItemType;
     setSideSize({ name, value });
-  }
-
-  public handleClick = (sectorId: string) => () => {
-    const { texture } = this.props;
-    this.props.addTextureItem({ sectorId, ...texture });
   }
 
   public render() {
@@ -67,13 +47,7 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
             handleInput={this.handleInput}
             style={{ gridArea: 'bottomSide', flexDirection: 'row' }}
             sideName="bottom" />
-          <StaticPreview
-            style={{ gridArea: 'preview' }}
-            sectorList={this.props.sectorList}
-            step={this.props.step}
-            className="static-preview-container"
-            handleClick={this.handleClick}
-          />
+          {this.props.children}
         </div>
       </div>
     );
@@ -82,15 +56,11 @@ export class SizeOptionsPanel extends React.Component<IProps, IState> {
 
 const mapStateToProps = (state: IStore) => ({
   side: state.side,
-  texture: state.texture,
-  textureList: state.textureList,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setSideSize: (size: sideEnteties.ISideSetType) => dispatch(sideEnteties.setSideSize(size)),
-  addTextureItem: (sectorTexture: ISectorTexture) =>
-    dispatch(textureListEnteties.addTextureItem(sectorTexture)),
-});
+const mapDispatchToProps = {
+  setSideSize: sideEnteties.setSideSize,
+};
 
 const SideSize = connect(mapStateToProps, mapDispatchToProps)(SizeOptionsPanel);
 export default SideSize;

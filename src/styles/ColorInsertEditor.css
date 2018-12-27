@@ -1,22 +1,22 @@
 /* ColorInsertEditor styles */
 
 .app-container {
-  width: 600px;
+  width: 800px;
   /* height: 600px; */
   margin: 0 auto;
   padding: 0;
 
-  display: grid;
+  /* display: grid;
   grid-template-columns: 300px 300px;
   grid-template-rows: auto;
   grid-template-areas:
     "options preview";
   justify-items: center;
-  align-items: center;
+  align-items: center; */
   border: 2px solid gray;
 }
 
-.app-container .options {
+/* .app-container .options {
   grid-area: options;
   background-color: lightsteelblue;
 }
@@ -24,11 +24,16 @@
 .app-container .preview {
   grid-area: preview;
   align-self: center;
-}
+} */
 
 /* Window Size */
 
 .window-size-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.app-container .type-toggle {
   display: flex;
   justify-content: space-around;
 }

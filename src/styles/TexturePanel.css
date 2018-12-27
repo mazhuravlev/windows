@@ -1,6 +1,7 @@
 .texture-panel-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .texture-panel-container .fileInput {
@@ -14,9 +15,14 @@
   justify-content: center;
   align-items: center;
   margin: 15px;
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
   background-color: gray;
+  border: 5px solid gray;
+}
+
+.texture-panel-container .imgPreview img {
+  height: 100%;
 }
 
 .texture-panel-container .centerText {

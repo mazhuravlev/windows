@@ -1,26 +1,35 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
-import { Dispatch } from 'redux';
 
 import '../styles/TexturePanel.css';
 
-import { ITexture } from '../interface';
+import { ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
+import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
 import NumberInput from './NumberInput';
 
 interface IProps {
+  currentSector: number;
+  textureList: ITextureList;
   texture: ITexture;
   setTexture: (texture: textureEnteties.ITextureState) => void;
+  addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
 
 class Texture extends React.Component<IProps> {
   public handleOffsetInput = (offsetType: string) => (value: number) => {
-    this.props.setTexture({
+    const texture = {
       ...this.props.texture,
       [offsetType]: value,
-    });
+    };
+    const textureItem: ISectorTexture = {
+      ...texture,
+      sectorId: String(this.props.currentSector),
+    };
+    this.props.addTextureItem(textureItem);
+    this.props.setTexture(texture);
   }
 
   public handleImageChange = (event: any) => {
@@ -29,15 +38,36 @@ class Texture extends React.Component<IProps> {
     const reader = new FileReader();
     const file = event.target.files[0];
     reader.onloadend = () => {
-      this.props.setTexture({
+      const { currentSector } = this.props;
+      const texture = {
+        ...this.props.texture,
         url: reader.result as string,
         fileName: file.name,
-        VOffset: 0,
-        HOffset: 0,
-      });
+      };
+      const textureItem: ISectorTexture = {
+        ...texture,
+        sectorId: String(currentSector),
+      };
+      this.props.addTextureItem(textureItem);
+      this.props.setTexture(texture);
     };
 
     if (file) reader.readAsDataURL(file);
+  }
+
+  public handlePreviewClick = () => {
+    const textureItem: ISectorTexture = {
+      ...this.props.texture,
+      VOffset: 0,
+      HOffset: 0,
+      sectorId: String(this.props.currentSector),
+    };
+    this.props.addTextureItem(textureItem);
+    this.props.setTexture({
+      ...this.props.texture,
+      VOffset: 0,
+      HOffset: 0,
+    });
   }
 
   public render() {
@@ -79,7 +109,7 @@ class Texture extends React.Component<IProps> {
           </div>
         </div>
         <div className="texture-panel-container-item">
-          <div className="imgPreview">
+          <div onClick={this.handlePreviewClick} className="imgPreview">
             {imagePreview}
           </div>
         </div>
@@ -89,13 +119,15 @@ class Texture extends React.Component<IProps> {
 }
 
 const mapStateToProps = (state: IStore) => ({
+  currentSector: state.currentSector,
+  textureList: state.textureList,
   texture: state.texture,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<textureEnteties.TextureAction>) => ({
-  setTexture: (texture: textureEnteties.ITextureState) =>
-    dispatch(textureEnteties.setTexture(texture)),
-});
+const mapDispatchToProps = {
+  addTextureItem: textureListEnteties.addTextureItem,
+  setTexture: textureEnteties.setTexture,
+};
 
 const TexturePanel = connect(mapStateToProps, mapDispatchToProps)(Texture);
 
