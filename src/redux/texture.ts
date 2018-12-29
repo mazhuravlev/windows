@@ -21,6 +21,12 @@ type SET = typeof SET;
 /*
     ACTIONS CONST
 */
+// type textureKeyType = keyof ITextureState;
+
+// interface IPayload {
+//   [key: in keyof ITextureState]: string | number;
+// }
+
 export interface ISetTexture {
   type: SET;
   payload: ITextureState;

@@ -7,7 +7,7 @@ import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/StaticPreview.css';
 
-import { ISectorList, ISideSize, ITextureList } from '../interface';
+import { ISectorList, ISideSize, ITexture, ITextureList } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -26,6 +26,7 @@ interface IState {
 
 interface IProps {
   side: ISideSize;
+  texture: ITexture;
   textureList: ITextureList;
   currentSector: number;
   setCurrentSector: (sectorId: number) => void;
@@ -54,14 +55,13 @@ class ColorInsert extends React.Component<IProps, IState> {
   }
 
   public handleClick = (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => {
-    const { setCurrentSector, textureList } = this.props;
+    const { setCurrentSector, textureList, texture } = this.props;
     setCurrentSector(Number(sectorId));
     if (textureList[sectorId]) {
       this.props.setTexture(textureList[sectorId]);
     } else {
       this.props.setTexture({
-        url: '',
-        fileName: '',
+        ...texture,
         VOffset: 0,
         HOffset: 0,
       });
@@ -105,6 +105,7 @@ class ColorInsert extends React.Component<IProps, IState> {
 
 const mapStateToProps = (state: IStore) => ({
   side: state.side,
+  texture: state.texture,
   textureList: state.textureList,
   currentSector: state.currentSector,
 });

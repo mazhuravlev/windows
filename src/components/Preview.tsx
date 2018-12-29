@@ -94,6 +94,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
           return (
             <Sector
               key={sector.id}
+              textureType={textureType}
               sector={sector}
               step={step}
               className={
