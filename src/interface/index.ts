@@ -16,6 +16,8 @@ export interface ITexture {
   fileName: string;
   HOffset: number;
   VOffset: number;
+  width: number;
+  height: number;
 }
 
 export interface ISectorTexture extends ITexture {

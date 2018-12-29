@@ -10,6 +10,13 @@ import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
 import NumberInput from './NumberInput';
 
+const getMeta = async (url: string | ArrayBuffer | null) => new Promise((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve({ width: img.width, height: img.height });
+  img.onerror = reject;
+  img.src = url as string;
+});
+
 interface IProps {
   currentSector: number;
   textureList: ITextureList;
@@ -37,10 +44,12 @@ class Texture extends React.Component<IProps> {
 
     const reader = new FileReader();
     const file = event.target.files[0];
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const { currentSector } = this.props;
+      const imgSize = await getMeta(reader.result);
       const texture = {
         ...this.props.texture,
+        ...imgSize,
         url: reader.result as string,
         fileName: file.name,
       };

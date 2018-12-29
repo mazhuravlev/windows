@@ -4,7 +4,7 @@ import Window from './Window';
 
 import { getSectorSize } from 'src/helpers';
 import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
-import { BRICK, DOUBLE_WINDOW, TILE, WINDOW } from '../static';
+import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, TILE, TILE_SIZE, WINDOW } from '../static';
 
 const shiftGridPosition = (sector: number, paddind: number): number => {
   if (paddind === 0) {
@@ -20,8 +20,8 @@ const shiftGridPosition = (sector: number, paddind: number): number => {
 
 const getStepSize = (textureType: string): number => {
   switch (textureType) {
-    case BRICK: return 15;
-    case TILE: return 20;
+    case BRICK: return BRICK_SIZE;
+    case TILE: return TILE_SIZE;
     default: return 0;
   }
 };

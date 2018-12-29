@@ -19,6 +19,7 @@ export const WINDOW = 'window';
 
 export const DOUBLE_WINDOW = 'double_window';
 
-// export const WINDOW_SIZE = { width: 32, height: 24, padding: 0 };
+// item size in pixels
+export const BRICK_SIZE = 15;
 
-// export const DOUBLE_WINDOW_SIZE = { width: 20, height: 24, padding: 8 };
+export const TILE_SIZE = 20;

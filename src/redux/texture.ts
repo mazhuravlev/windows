@@ -9,6 +9,8 @@ const initState = {
   fileName: '',
   VOffset: 0,
   HOffset: 0,
+  width: 0,
+  height: 0,
 };
 
 /*

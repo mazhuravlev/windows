@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BRICK } from 'src/static';
+import { BRICK, BRICK_SIZE, TILE_SIZE } from 'src/static';
 import { buildSizeStyleObj } from '../helpers';
 import { INumObjType, ISector, IStyleObj, ITexture, ITextureList } from '../interface';
 
@@ -13,6 +13,12 @@ interface IProps {
   textureType: string;
   currentSector: number;
 }
+
+const getTextureSize = (textureType: string, texture: ITexture, ratio: number): string => {
+  return `${textureType === BRICK ?
+    `${texture.width}px ${texture.height}px`
+    : `${texture.width * ratio}px ${texture.height * ratio}px`}`;
+};
 
 const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
   const { sector, className, step, sectorSize, gridArea, textureList, onClick, currentSector } = props;
@@ -29,7 +35,8 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
     const { url, VOffset, HOffset } = texture;
     styleObj = {
       ...styleObj,
-      background: `url(${url}) ${props.textureType === BRICK ? '100% 100%' : '133% 133%'}`,
+      backgroundImage: `url(${url})`,
+      backgroundSize: getTextureSize(props.textureType, texture, TILE_SIZE / BRICK_SIZE),
       backgroundPosition: `left ${HOffset * step}px top ${VOffset * step}px`,
     };
   }
