@@ -23,7 +23,7 @@ const getTextureSize = (textureType: string, texture: ITexture, ratio: number): 
 const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
   const { sector, className, step, sectorSize, gridArea, textureList, onClick, currentSector } = props;
 
-  const boxShadow = 'inset 0px 0px 0px 2px red';
+  const boxShadow = 'inset 0px 0px 0px 3px red';
   let styleObj: IStyleObj = {
     gridArea: `sector${gridArea}`,
     ...buildSizeStyleObj(sectorSize, step),
@@ -44,7 +44,7 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
     <div
       key={sector.id}
       style={styleObj}
-      className={className}
+      className={`${className}`}
       onClick={onClick}
     >
       {''}

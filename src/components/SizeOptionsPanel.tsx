@@ -7,10 +7,12 @@ import { IStore } from '../store';
 
 import '../styles/SizeOptionsPanel.css';
 
+import { BRICK } from 'src/static';
 import SideOption from './SideOption';
 
 interface IProps {
   side: ISideSize;
+  textureType: string;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
 }
 
@@ -23,31 +25,40 @@ export class SizeOptionsPanel extends React.Component<IProps> {
   }
 
   public render() {
+    const { textureType } = this.props;
+    const [preview, tools] = React.Children.toArray(this.props.children);
     return (
       <div>
         <div className="container-window-options">
           <SideOption
+            max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'leftSide', flexDirection: 'column' }}
             sideName="left"
           />
           <SideOption
+            max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'topSide', flexDirection: 'row' }}
             sideName="top" />
           <SideOption
+            max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'rightSide', flexDirection: 'column' }}
             sideName="right" />
           <SideOption
+            max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'bottomSide', flexDirection: 'row' }}
             sideName="bottom" />
-          {this.props.children}
+          {tools}
+          <div style={{ width: '720px', height: '600px', gridArea: 'preview', position: 'relative' }}>
+            {preview}
+          </div>
         </div>
       </div>
     );

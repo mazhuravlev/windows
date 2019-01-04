@@ -23,3 +23,6 @@ export const DOUBLE_WINDOW = 'double_window';
 export const BRICK_SIZE = 15;
 
 export const TILE_SIZE = 20;
+
+// (600mm/75)*15px
+export const PREVIEW_MAX_SECTOR_SIZE = 120;

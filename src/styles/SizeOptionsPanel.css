@@ -2,8 +2,10 @@
 .container-window-options {
   position: relative;
   display: grid;
+  grid-template-columns: auto 720px auto;
+  grid-template-rows: auto 600px auto;
   grid-template-areas:
-    ". topSide ."
+    ". topSide tools"
     "leftSide preview rightSide"
     ". bottomSide .";
     justify-items: center;

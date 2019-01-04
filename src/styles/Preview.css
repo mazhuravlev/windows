@@ -1,7 +1,8 @@
 .preview-container {
+  position: absolute;
   display: grid;
-  /* grid-column-gap: 10px;
-  grid-row-gap: 10px; */
+  /* width: 720px;
+  height: 600px; */
   justify-items: stretch;
   align-items: stretch;
   grid-template-areas:
@@ -29,6 +30,7 @@
 
 .preview-container .preview-container-item {
   background-color: darkslategray;
+  position: relative;
   /* border: 2px solid black; */
 }
 
@@ -37,22 +39,254 @@
   box-shadow: inset 0px 0px 0px 2px black;
 }
 
-.preview-container .sector3 {
-  height: 20px;
+.preview-container .sector1-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
 }
 
-.preview-container .sector6 {
-  width: 20px;
+.preview-container .sector2-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 480px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
 }
 
-.preview-container .sector7 {
-  width: 20px;
+.preview-container .sector5-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  left: 0;
+  bottom: 0;
 }
 
-.preview-container .sector8 {
-  width: 20px;
+.preview-container .sector6-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 360px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
 }
 
-.preview-container .sector11 {
-  height: 20px;
+.preview-container .sector8-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 360px;
+  border: 1px solid black;
+  left: 0;
+  bottom: 0;
+}
+
+.preview-container .sector9-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector10-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 480px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector13-window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  left: 0;
+  top: 0;
+}
+
+.preview-container .sector1-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector2-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 300px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector3-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 60px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector4-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector5-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  left: 0;
+  bottom: 0;
+}
+
+.preview-container .sector6-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 360px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector7-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 60px;
+  height: 360px;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+}
+
+.preview-container .sector8-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 360px;
+  border: 1px solid black;
+  left: 0;
+  bottom: 0;
+}
+
+.preview-container .sector9-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector10-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 300px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector11-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 60px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector12-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+}
+
+.preview-container .sector13-double_window-grid-mask::after {
+  position: absolute;
+  display: block;
+  content: '';
+  box-sizing: border-box;
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+  left: 0;
+  top: 0;
 }

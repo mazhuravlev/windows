@@ -7,6 +7,7 @@ import NumberInput from './NumberInput';
 interface IProps extends React.HTMLProps<HTMLDivElement> {
   sideName: string;
   side: ISideSize;
+  max: number;
   handleInput: (sideName: string) =>
     (value: number) => void;
 }
@@ -22,7 +23,7 @@ const SideOption = (props: IProps) => {
           style={{ position: 'relative' }}
           value={side[`${sideName}Width`]}
           min={1}
-          max={10}
+          max={props.max}
           onChange={handleInput(`${sideName}Width`)}
         />
       </div>
@@ -33,7 +34,7 @@ const SideOption = (props: IProps) => {
           style={{ position: 'relative' }}
           value={side[`${sideName}Margin`]}
           min={0}
-          max={10}
+          max={props.max}
           onChange={handleInput(`${sideName}Margin`)}
         />
       </div>

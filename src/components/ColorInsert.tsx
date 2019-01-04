@@ -11,6 +11,8 @@ import { ISectorList, ISideSize, ITexture, ITextureList } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
+import gridIconSvg from '../static/gridIcon.svg';
+
 import * as sectorEnteties from '../redux/currentSector';
 import * as textureEnteties from '../redux/texture';
 
@@ -22,6 +24,7 @@ interface IState {
   sectorList: ISectorList;
   textureType: string;
   windowType: string;
+  gridHide: boolean;
 }
 
 interface IProps {
@@ -38,7 +41,13 @@ class ColorInsert extends React.Component<IProps, IState> {
     sectorList: SECTOR_LIST,
     textureType: BRICK,
     windowType: WINDOW,
+    gridHide: false,
   };
+
+  public handleGridHide = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    this.setState({ gridHide: !this.state.gridHide });
+  }
 
   public textureTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
@@ -47,8 +56,9 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public windowTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
+  public windowTypeToggle = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const value = this.state.windowType === WINDOW ? DOUBLE_WINDOW : WINDOW;
     this.setState({
       windowType: value,
     });
@@ -78,22 +88,30 @@ class ColorInsert extends React.Component<IProps, IState> {
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={BRICK} checked={textureType === BRICK}/> Кирпич</p>
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={TILE} checked={textureType === TILE}/> Плитка</p>
           </div>
-          <div className="type-toggle">
-              <p>Тип окна: </p>
-              <p><input onChange={this.windowTypeToggle} type="radio" name="windowType" value={WINDOW} checked={windowType === WINDOW}/> Одинарное</p>
-              <p><input onChange={this.windowTypeToggle} type="radio" name="windowType" value={DOUBLE_WINDOW} checked={windowType === DOUBLE_WINDOW}/> Двойное</p>
-          </div>
           <TexturePanel />
           <SizeOptionsPanel {...this.state}>
             <Preview
               handleClick={this.handleClick}
-              style={{ gridArea: 'preview' }}
               textureList={this.props.textureList}
               side={this.props.side}
               className="preview-container"
               currentSector={this.props.currentSector}
               {...this.state}
             />
+            <div className="container-control-buttons" style={{ gridArea: 'tools' }}>
+              <a
+                href="#"
+                onClick={this.handleGridHide}
+                className={`grid-icon ${this.state.gridHide ? 'grid-icon-hide' : ''}`}
+              >
+                <img src={gridIconSvg} alt=""/>
+              </a>
+              <a
+                href="#"
+                onClick={this.windowTypeToggle}
+                className={`window-icon ${windowType === WINDOW ? '' : 'double-window'}`}
+              />
+            </div>
           </SizeOptionsPanel>
           <Button block={true} color="primary">Save</Button>
           <Button className="mb-1" block={true}>Cancel</Button>

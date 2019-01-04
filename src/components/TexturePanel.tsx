@@ -39,6 +39,10 @@ class Texture extends React.Component<IProps> {
     this.props.setTexture(texture);
   }
 
+  public resetFileInput = (event: any) => {
+    event.target.value = null;
+  }
+
   public handleImageChange = (event: any) => {
     event.preventDefault();
 
@@ -94,6 +98,7 @@ class Texture extends React.Component<IProps> {
           <input className="fileInput"
             type="file"
             onChange={this.handleImageChange}
+            onClick={this.resetFileInput}
           />
           <div style={{ flexDirection: 'row', display: 'flex' }}>
             <UncontrolledTooltip

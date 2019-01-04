@@ -1,30 +1,11 @@
 /* ColorInsertEditor styles */
 
 .app-container {
-  width: 800px;
-  /* height: 600px; */
+  width: 850px;
   margin: 0 auto;
   padding: 0;
-
-  /* display: grid;
-  grid-template-columns: 300px 300px;
-  grid-template-rows: auto;
-  grid-template-areas:
-    "options preview";
-  justify-items: center;
-  align-items: center; */
   border: 2px solid gray;
 }
-
-/* .app-container .options {
-  grid-area: options;
-  background-color: lightsteelblue;
-}
-
-.app-container .preview {
-  grid-area: preview;
-  align-self: center;
-} */
 
 /* Window Size */
 
@@ -36,4 +17,56 @@
 .app-container .type-toggle {
   display: flex;
   justify-content: space-around;
+}
+
+.container-control-buttons {
+  /* position: absolute; */
+  margin-left: -150px;
+  display: flex;
+}
+
+.grid-icon {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-right: 2px;
+  padding: 0;
+}
+
+.grid-icon-hide::after {
+  position: absolute;
+  display: block;
+  content: '';
+  width: 50px;
+  height: 4px;
+  background-color: red;
+  transform: rotate(45deg);
+  left: 50%;
+  top: 50%;
+  margin-left: -25px;
+  margin-top: -2px;
+}
+
+.window-icon {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  border: 4px solid black;
+  border-radius: 15%;
+}
+
+.double-window::after {
+  position: absolute;
+  display: block;
+  content: '';
+
+  width: 4px;
+  height: 100%;
+  background-color: black;
+
+  top: 0;
+  right: 30%;
 }

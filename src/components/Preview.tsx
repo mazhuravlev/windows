@@ -4,7 +4,7 @@ import Window from './Window';
 
 import { getSectorSize } from 'src/helpers';
 import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
-import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, TILE, TILE_SIZE, WINDOW } from '../static';
+import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, PREVIEW_MAX_SECTOR_SIZE as PREVIEW_MAX_MARGIN, TILE, TILE_SIZE, WINDOW } from '../static';
 
 const shiftGridPosition = (sector: number, paddind: number): number => {
   if (paddind === 0) {
@@ -49,6 +49,13 @@ const getSector7Width = (textureType: string): number => {
   }
 };
 
+const getPreviewPosition = (side: ISideSize, step: number) => {
+  const { leftWidth, leftMargin, topMargin, topWidth } = side;
+  const top = PREVIEW_MAX_MARGIN - (topMargin + topWidth) * step;
+  const left = PREVIEW_MAX_MARGIN - (leftWidth + leftMargin) * step;
+  return { top, left };
+};
+
 interface IProps {
   sectorList: ISectorList;
   textureType: string;
@@ -56,6 +63,7 @@ interface IProps {
   side: ISideSize;
   textureList: ITextureList;
   currentSector: number;
+  gridHide: boolean;
   handleClick: (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => void;
 }
 
@@ -84,8 +92,9 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
     marginBottom: side.bottomMargin,
   };
   const sector7Width = getSector7Width(textureType);
+  const previewPosition = getPreviewPosition(side, step);
   return (
-    <div style={props.style} className={className}>
+    <div style={{ ...previewPosition }} className={className}>
       {
         Object.keys(sectorList).map((key) => {
           const sector = sectorList[key];
@@ -98,7 +107,9 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               sector={sector}
               step={step}
               className={
-                `preview-container-item sector${sectorNumber}`}
+                `preview-container-item
+                sector${sectorNumber}
+                ${props.gridHide ? '' : `sector${sectorNumber}-${windowType}-grid-mask`}`}
               sectorSize={size}
               currentSector={props.currentSector}
               textureList={props.textureList}
