@@ -5,7 +5,7 @@ import { Button, Input } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
-import '../styles/StaticPreview.css';
+// import '../styles/StaticPreview.css';
 
 import { ISectorList, ISideSize, ITexture, ITextureList } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
@@ -24,6 +24,7 @@ import TexturePanel from './TexturePanel';
 interface IState {
   sectorList: ISectorList;
   textureType: string;
+  rootType: string;
   windowType: string;
   gridHide: boolean;
   colorInsertName: string;
@@ -45,6 +46,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     windowType: WINDOW,
     gridHide: false,
     colorInsertName: '',
+    rootType: 'sector',
   };
 
   public handleGridHide = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -59,6 +61,13 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
+  public rootTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    this.setState({
+      rootType: value,
+    });
+  }
+
   public windowTypeToggle = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     const value = this.state.windowType === WINDOW ? DOUBLE_WINDOW : WINDOW;
@@ -67,7 +76,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public handleClick = (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handlePreviewClick = (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => {
     const { setCurrentSector, textureList, texture } = this.props;
     setCurrentSector(Number(sectorId));
     if (textureList[sectorId]) {
@@ -118,21 +127,26 @@ class ColorInsert extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { textureType } = this.state;
+    const { textureType, rootType } = this.state;
     return (
       <div className="app-container">
         <div className="container-item options">
           {this.renderSavePanel()}
           <div className="type-toggle">
-              <p>Тип текстуры: </p>
+              <p>Тип текстуры:</p>
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={BRICK} checked={textureType === BRICK}/> Кирпич</p>
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={TILE} checked={textureType === TILE}/> Плитка</p>
+          </div>
+          <div className="type-toggle">
+              <p>Параметры привязки:</p>
+              <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'sector'} checked={rootType === 'sector'}/> Сектор</p>
+              <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'window'} checked={rootType === 'window'}/> Окно</p>
           </div>
           <TexturePanel />
         </div>
         <SizeOptionsPanel {...this.state}>
           <Preview
-            handleClick={this.handleClick}
+            handleClick={this.handlePreviewClick}
             textureList={this.props.textureList}
             side={this.props.side}
             className="preview-container"

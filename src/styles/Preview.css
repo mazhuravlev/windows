@@ -1,15 +1,12 @@
 .preview-container {
   position: absolute;
   display: grid;
-  /* width: 720px;
-  height: 600px; */
   justify-items: stretch;
   align-items: stretch;
   grid-template-areas:
     "sector1 sector2 sector3 sector4 sector5"
     "sector6 window1 sector7 window2 sector8"
     "sector9 sector10 sector11 sector12 sector13";
-  margin-bottom: 20px;  
 }
 
 .preview-container:last-child {
@@ -19,23 +16,19 @@
 .preview-container .window1 {
   grid-area: window1;
   background-color: darkgray;
-  margin: 10px;
 }
 
 .preview-container .window2 {
   grid-area: window2;
   background-color: darkgray;
-  margin: 10px;
 }
 
 .preview-container .preview-container-item {
   background-color: darkslategray;
   position: relative;
-  /* border: 2px solid black; */
 }
 
 .preview-container .preview-container-item:hover {
-  /* border: 2px solid black; */
   box-shadow: inset 0px 0px 0px 2px darkgray;
 }
 

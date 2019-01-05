@@ -128,7 +128,6 @@ class Texture extends React.Component<IProps, IState> {
 
     return (
       <div className="texture-panel-container">
-        {/* <GridStyles/> */}
         <a className="texture-panel-container-item" href="#">
           <img className="icon" src={texturesIconSvg} alt=""/>
         </a>
