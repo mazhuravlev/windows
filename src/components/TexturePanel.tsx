@@ -10,6 +10,7 @@ import { ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
+
 import NumberInput from './NumberInput';
 
 const getMeta = async (url: string | ArrayBuffer | null) => new Promise((resolve, reject) => {
@@ -26,10 +27,6 @@ interface IProps {
   setTexture: (texture: textureEnteties.ITextureState) => void;
   addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
-
-// interface IPreviewList {
-//   [name: string]: ITexture;
-// }
 
 interface IState {
   previewList: ITexture[];
@@ -107,8 +104,8 @@ class Texture extends React.Component<IProps, IState> {
     return (
       <div className="texture-panel-container-item preview-list">
         {
-          this.state.previewList.map(item => (
-            <div className="preview-list-item">
+          this.state.previewList.map((item, i) => (
+            <div key={i} className="preview-list-item">
               <a onClick={this.handlePreviewListClick(item)} href="#">
                 <img src={item.url} alt=""/>
               </a>
@@ -131,6 +128,7 @@ class Texture extends React.Component<IProps, IState> {
 
     return (
       <div className="texture-panel-container">
+        {/* <GridStyles/> */}
         <a className="texture-panel-container-item" href="#">
           <img className="icon" src={texturesIconSvg} alt=""/>
         </a>

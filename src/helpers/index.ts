@@ -1,4 +1,5 @@
-import { INumObjType, ISideSize } from '../interface';
+import { WINDOW } from 'src/static';
+import { INumObjType, ISideSize, ISize } from '../interface';
 
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
   return Object.keys(sizeObj).reduce((acc, key) =>
@@ -53,5 +54,80 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
       return { width: side.rightWidth };
     }
     default: return {};
+  }
+};
+
+export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType: string, step: number): ISize => {
+  switch (sector) {
+    case 1: {
+      const width = 120 - sideSize.leftMargin * step;
+      const height = 120 - sideSize.topMargin * step;
+      return { width, height };
+    }
+    case 2: {
+      const height = 120 - sideSize.topMargin * step;
+      const width = windowType === WINDOW ?
+        480 + (sideSize.leftMargin + sideSize.rightMargin) * step
+        : 300 + sideSize.leftMargin * step;
+      return { width, height };
+    }
+    case 3: {
+      const width = 60;
+      const height = 120 - sideSize.topMargin * step;
+      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+    }
+    case 4: {
+      const width = 120 + sideSize.rightMargin * step;
+      const height = 120 - sideSize.topMargin * step;
+      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+    }
+    case 5: {
+      const width = 120 - sideSize.rightMargin * step;
+      const height = 120 - sideSize.topMargin * step;
+      return { width, height };
+    }
+    case 6: {
+      const width = 120 - sideSize.leftMargin * step;
+      const height = 360 + (sideSize.topMargin + sideSize.bottomMargin) * step;
+      return { width, height };
+    }
+    case 7: {
+      const width = 60;
+      const height = 360 + (sideSize.topMargin + sideSize.bottomMargin) * step;
+      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+    }
+    case 8: {
+      const width = 120 - sideSize.rightMargin * step;
+      const height = 360 + (sideSize.topMargin + sideSize.bottomMargin) * step;
+      return { width, height };
+    }
+    case 9: {
+      const width = 120 - sideSize.leftMargin * step;
+      const height = 120 - sideSize.bottomMargin * step;
+      return { width, height };
+    }
+    case 10: {
+      const height = 120 - sideSize.bottomMargin * step;
+      const width = windowType === WINDOW ?
+      480 + (sideSize.leftMargin + sideSize.rightMargin) * step
+      : 300 + sideSize.leftMargin * step;
+      return { width, height };
+    }
+    case 11: {
+      const width = 60;
+      const height = 120 - sideSize.bottomMargin * step;
+      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+    }
+    case 12: {
+      const width = 120 + sideSize.rightMargin * step;
+      const height = 120 - sideSize.bottomMargin * step;
+      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+    }
+    case 13: {
+      const width = 120 - sideSize.rightMargin * step;
+      const height = 120 - sideSize.bottomMargin * step;
+      return { width, height };
+    }
+    default: return { width: 0, height: 0 };
   }
 };

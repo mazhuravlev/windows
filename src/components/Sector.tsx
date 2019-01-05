@@ -47,7 +47,7 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
       className={`${className}`}
       onClick={onClick}
     >
-      {''}
+      {props.children}
     </div>
   );
 };

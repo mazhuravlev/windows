@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sector from './Sector';
 import Window from './Window';
 
-import { getSectorSize } from 'src/helpers';
+import { getGridItemSize, getSectorSize } from 'src/helpers';
 import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
 import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, PREVIEW_MAX_SECTOR_SIZE as PREVIEW_MAX_MARGIN, TILE, TILE_SIZE, WINDOW } from '../static';
 
@@ -108,14 +108,20 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               step={step}
               className={
                 `preview-container-item
-                sector${sectorNumber}
-                ${props.gridHide ? '' : `sector${sectorNumber}-${windowType}-grid-mask`}`}
+                sector${sectorNumber}`}
               sectorSize={size}
               currentSector={props.currentSector}
               textureList={props.textureList}
               onClick={handleClick(sector.id)}
               gridArea={shiftGridPosition(sectorNumber, window.padding)}
-            />
+            >
+              <div
+                className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`}`}
+                style={getGridItemSize(sectorNumber, side, windowType, step)}
+              >
+                {''}
+              </div>
+            </Sector>
           );
         })
       }

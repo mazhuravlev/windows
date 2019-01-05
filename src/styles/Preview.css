@@ -39,254 +39,87 @@
   box-shadow: inset 0px 0px 0px 2px darkgray;
 }
 
-.preview-container .sector1-window-grid-mask::after {
+.preview-container .grid-item {
   position: absolute;
   display: block;
   content: '';
   box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
 }
 
-.preview-container .sector2-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 480px;
-  height: 120px;
-  border: 1px solid black;
+.preview-container .sector1-grid-mask {
   right: 0;
   bottom: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector5-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
+.preview-container .sector2-grid-mask {
+  right: 0;
+  bottom: 0;
   border: 1px solid black;
+}
+
+.preview-container .sector3-grid-mask {
+  right: 0;
+  bottom: 0;
+  border: 1px solid black;
+}
+
+.preview-container .sector4-grid-mask {
+  right: 0;
+  bottom: 0;
+  border: 1px solid black;
+}
+
+.preview-container .sector5-grid-mask {
   left: 0;
   bottom: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector6-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 360px;
-  border: 1px solid black;
+.preview-container .sector6-grid-mask {
   right: 0;
   bottom: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector8-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 360px;
+.preview-container .sector7-grid-mask {
+  right: 0;
+  bottom: 0;
   border: 1px solid black;
+}
+
+.preview-container .sector8-grid-mask {
   left: 0;
   bottom: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector9-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
+.preview-container .sector9-grid-mask {
   right: 0;
   top: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector10-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 480px;
-  height: 120px;
-  border: 1px solid black;
+.preview-container .sector10-grid-mask {
   right: 0;
   top: 0;
+  border: 1px solid black;
 }
 
-.preview-container .sector13-window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
+.preview-container .sector11-grid-mask {
+  right: 0;
+  top: 0;
   border: 1px solid black;
+}
+
+.preview-container .sector12-grid-mask {
+  right: 0;
+  top: 0;
+  border: 1px solid black;
+}
+
+.preview-container .sector13-grid-mask {
   left: 0;
   top: 0;
-}
-
-.preview-container .sector1-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
   border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector2-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 300px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector3-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 60px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector4-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector5-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  left: 0;
-  bottom: 0;
-}
-
-.preview-container .sector6-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 360px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector7-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 60px;
-  height: 360px;
-  border: 1px solid black;
-  right: 0;
-  bottom: 0;
-}
-
-.preview-container .sector8-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 360px;
-  border: 1px solid black;
-  left: 0;
-  bottom: 0;
-}
-
-.preview-container .sector9-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  top: 0;
-}
-
-.preview-container .sector10-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 300px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  top: 0;
-}
-
-.preview-container .sector11-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 60px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  top: 0;
-}
-
-.preview-container .sector12-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  right: 0;
-  top: 0;
-}
-
-.preview-container .sector13-double_window-grid-mask::after {
-  position: absolute;
-  display: block;
-  content: '';
-  box-sizing: border-box;
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
-  left: 0;
-  top: 0;
 }
