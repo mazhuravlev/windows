@@ -1,3 +1,8 @@
+p, img {
+  margin: 0;
+  padding: 0;
+}
+
 /* ColorInsertEditor styles */
 
 .app-container {
@@ -7,6 +12,10 @@
   border: 2px solid gray;
 }
 
+.app-container .container-item {
+  width: 720px;
+  margin: 0 auto;
+}
 /* Window Size */
 
 .window-size-container {
@@ -16,7 +25,16 @@
 
 .app-container .type-toggle {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+}
+
+.app-container .type-toggle p {
+  margin: 0;
+  padding: 0;
+}
+
+.app-container .type-toggle input {
+  margin-left: 50px;
 }
 
 .container-control-buttons {
@@ -25,7 +43,7 @@
   display: flex;
 }
 
-.grid-icon {
+.icon {
   position: relative;
   display: block;
   width: 40px;
@@ -69,4 +87,24 @@
 
   top: 0;
   right: 30%;
+}
+
+/*  save-panel styles  */
+
+.app-container .save-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.app-container .save-panel p {
+  padding: 0;
+  margin: 0;
+}
+
+.app-container .save-panel input {
+  max-width: 400px;
 }

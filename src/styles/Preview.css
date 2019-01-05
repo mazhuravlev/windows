@@ -36,7 +36,7 @@
 
 .preview-container .preview-container-item:hover {
   /* border: 2px solid black; */
-  box-shadow: inset 0px 0px 0px 2px black;
+  box-shadow: inset 0px 0px 0px 2px darkgray;
 }
 
 .preview-container .sector1-window-grid-mask::after {

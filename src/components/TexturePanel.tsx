@@ -4,6 +4,8 @@ import { UncontrolledTooltip } from 'reactstrap';
 
 import '../styles/TexturePanel.css';
 
+import texturesIconSvg from '../static/icons/texturesIcon.svg';
+
 import { ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
@@ -25,7 +27,19 @@ interface IProps {
   addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
 
-class Texture extends React.Component<IProps> {
+// interface IPreviewList {
+//   [name: string]: ITexture;
+// }
+
+interface IState {
+  previewList: ITexture[];
+}
+
+class Texture extends React.Component<IProps, IState> {
+  public state: IState = {
+    previewList: [],
+  };
+
   public handleOffsetInput = (offsetType: string) => (value: number) => {
     const texture = {
       ...this.props.texture,
@@ -63,6 +77,7 @@ class Texture extends React.Component<IProps> {
       };
       this.props.addTextureItem(textureItem);
       this.props.setTexture(texture);
+      this.setState({ previewList: [...this.state.previewList, texture] });
     };
 
     if (file) reader.readAsDataURL(file);
@@ -83,8 +98,30 @@ class Texture extends React.Component<IProps> {
     });
   }
 
+  public handlePreviewListClick = (texture: ITexture) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    this.props.setTexture(texture);
+  }
+
+  public renderTextureList() {
+    return (
+      <div className="texture-panel-container-item preview-list">
+        {
+          this.state.previewList.map(item => (
+            <div className="preview-list-item">
+              <a onClick={this.handlePreviewListClick(item)} href="#">
+                <img src={item.url} alt=""/>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    );
+  }
+
   public render() {
-    const imagePreviewUrl = this.props.texture.url;
+    const { texture } = this.props;
+    const imagePreviewUrl = texture.url;
     let imagePreview = null;
     if (imagePreviewUrl) {
       imagePreview = (<img src={imagePreviewUrl} />);
@@ -94,6 +131,10 @@ class Texture extends React.Component<IProps> {
 
     return (
       <div className="texture-panel-container">
+        <a className="texture-panel-container-item" href="#">
+          <img className="icon" src={texturesIconSvg} alt=""/>
+        </a>
+        <p className="texture-panel-container-item texture-name">Текстура: {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}</p>
         <div className="texture-panel-container-item">
           <input className="fileInput"
             type="file"
@@ -127,6 +168,7 @@ class Texture extends React.Component<IProps> {
             {imagePreview}
           </div>
         </div>
+        {this.state.previewList.length ? this.renderTextureList() : null}
       </div>
     );
   }

@@ -1,7 +1,17 @@
 .texture-panel-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.texture-panel-container .texture-panel-container-item {
+  margin-right: 5px;
+}
+
+.texture-panel-container .texture-name {
+  width: 250px;
+  overflow: hidden;
 }
 
 .texture-panel-container .fileInput {
@@ -23,9 +33,32 @@
 
 .texture-panel-container .imgPreview img {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .texture-panel-container .centerText {
   text-align: center;
   width: 500px;
+}
+
+.texture-panel-container .preview-list {
+  width: 150px;
+  height: 100px;
+  overflow-y: scroll;
+  border: 1px solid gray;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.texture-panel-container .preview-list .preview-list-item {
+  padding: 1px;
+  width: 30px;
+  height: 30px;
+}
+
+.texture-panel-container .preview-list .preview-list-item img{
+  height: 100%;
+  width: 100%;
 }
