@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sector from './Sector';
 import Window from './Window';
 
-import { getGridItemSize, getSectorSize } from 'src/helpers';
+import { getGridItemSize, getSectorSize } from '../helpers';
 import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
 import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, PREVIEW_MAX_SECTOR_SIZE as PREVIEW_MAX_MARGIN, TILE, TILE_SIZE, WINDOW } from '../static';
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
 
@@ -36,6 +37,26 @@ class Texture extends React.Component<IProps, IState> {
   public state: IState = {
     previewList: [],
   };
+
+  public handleKey = (key: string) => {
+    const { texture } = this.props;
+    switch (key) {
+      case 'down':
+        this.handleOffsetInput('VOffset')(texture.VOffset - 1);
+        break;
+      case 'up':
+        this.handleOffsetInput('VOffset')(texture.VOffset + 1);
+        break;
+      case 'right':
+        this.handleOffsetInput('HOffset')(texture.HOffset + 1);
+        break;
+      case 'left':
+        this.handleOffsetInput('HOffset')(texture.HOffset - 1);
+        break;
+      default:
+        return;
+    }
+  }
 
   public handleOffsetInput = (offsetType: string) => (value: number) => {
     const texture = {
@@ -116,6 +137,16 @@ class Texture extends React.Component<IProps, IState> {
     );
   }
 
+  public renderKeyControlComponent() {
+    return (
+      <KeyboardEventHandler
+          handleKeys={['left', 'right', 'up', 'down']}
+          handleFocusableElements={true}
+          // tslint:disable-next-line:jsx-no-lambda
+          onKeyEvent={this.handleKey}/>
+    );
+  }
+
   public render() {
     const { texture } = this.props;
     const imagePreviewUrl = texture.url;
@@ -128,6 +159,7 @@ class Texture extends React.Component<IProps, IState> {
 
     return (
       <div className="texture-panel-container">
+        {this.renderKeyControlComponent()}
         <a className="texture-panel-container-item" href="#">
           <img className="icon" src={texturesIconSvg} alt=""/>
         </a>

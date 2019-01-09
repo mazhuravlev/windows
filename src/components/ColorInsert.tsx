@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'reactstrap';
+import * as uuid from 'uuid/v4';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
-// import '../styles/StaticPreview.css';
 
 import { ISectorList, ISideSize, ITexture, ITextureList } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
@@ -95,6 +95,14 @@ class ColorInsert extends React.Component<IProps, IState> {
     this.setState({ colorInsertName: value });
   }
 
+  public saveColorInsertToJSON = () => {
+    const id = uuid();
+    const { side } = this.props;
+    const { colorInsertName } = this.state;
+    const json = JSON.stringify({ id, name: colorInsertName, ...side });
+    console.log(json);
+  }
+
   public renderSavePanel() {
     return (
       <div className="save-panel">
@@ -155,7 +163,7 @@ class ColorInsert extends React.Component<IProps, IState> {
           />
           {this.renderTools()}
         </SizeOptionsPanel>
-        <Button block={true} color="primary">Save</Button>
+        <Button onClick={this.saveColorInsertToJSON} block={true} color="primary">Save</Button>
       </div>
     );
   }

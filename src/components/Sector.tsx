@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { BRICK, BRICK_SIZE, TILE_SIZE } from 'src/static';
 import { buildSizeStyleObj } from '../helpers';
 import { INumObjType, ISector, IStyleObj, ITexture, ITextureList } from '../interface';
+import { BRICK, BRICK_SIZE, TILE_SIZE } from '../static';
 
 interface IProps {
   sector: ISector;

@@ -7,7 +7,7 @@ import { IStore } from '../store';
 
 import '../styles/SizeOptionsPanel.css';
 
-import { BRICK } from 'src/static';
+import { BRICK } from '../static';
 import SideOption from './SideOption';
 
 interface IProps {

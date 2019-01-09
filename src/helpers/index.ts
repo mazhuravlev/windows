@@ -1,5 +1,5 @@
-import { WINDOW } from 'src/static';
 import { INumObjType, ISideSize, ISize } from '../interface';
+import { WINDOW } from '../static';
 
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
   return Object.keys(sizeObj).reduce((acc, key) =>
