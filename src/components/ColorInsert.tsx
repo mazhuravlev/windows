@@ -97,10 +97,41 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public saveColorInsertToJSON = () => {
     const id = uuid();
-    const { side } = this.props;
+    const { side, textureList } = this.props;
     const { colorInsertName } = this.state;
-    const json = JSON.stringify({ id, name: colorInsertName, ...side });
-    console.log(json);
+    const sectorsId = Object.keys(this.state.sectorList);
+    if (colorInsertName.length === 0) {
+      alert('Введите имя текстуры!');
+    } else {
+      const sectors = document.getElementsByClassName('preview-container-item');
+      const sectorsSize = sectorsId.reduce((acc, sectorId) => {
+        const newItem = { [sectorId]: {
+          width: sectors[Number(sectorId) - 1].clientWidth,
+          height: sectors[Number(sectorId) - 1].clientHeight,
+        },
+        };
+        return { ...acc, ...newItem };
+      },                                   {});
+
+      const sectorParams = sectorsId.map((sectorId) => {
+        const texture = textureList[sectorId];
+        if (texture) {
+          return { sector: sectorId, ...texture, ...sectorsSize[sectorId] };
+        }
+        const emptyTexture = {
+          url: '',
+          fileName: '',
+          HOffset: 0,
+          VOffset: 0,
+          width: 0,
+          height: 0,
+        };
+        return { sector: sectorId, ...emptyTexture, ...sectorsSize[sectorId] };
+      });
+
+      const result = { id, name: colorInsertName, ...side, sectors: sectorParams };
+      alert(JSON.stringify(result));
+    }
   }
 
   public renderSavePanel() {

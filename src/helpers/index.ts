@@ -131,3 +131,7 @@ export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType:
     default: return { width: 0, height: 0 };
   }
 };
+
+export const getRealSectorSize = (sector: number, sideSize: ISideSize, windowType: string, step: number) => {
+  document.getElementsByClassName('sector1');
+};
