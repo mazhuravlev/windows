@@ -152,14 +152,14 @@ class ColorInsert extends React.Component<IProps, IState> {
         <a
           href="#"
           onClick={this.handleGridHide}
-          className={`icon ${this.state.gridHide ? 'grid-icon-hide' : ''}`}
+          className={`icon ${this.state.gridHide ? '' : 'grid-icon-hide'}`}
         >
           <img src={gridIconSvg} alt=""/>
         </a>
         <a
           href="#"
           onClick={this.windowTypeToggle}
-          className={`window-icon ${this.state.windowType === WINDOW ? '' : 'double-window'}`}
+          className={`window-icon ${this.state.windowType === DOUBLE_WINDOW ? '' : 'double-window'}`}
         />
       </div>
     );

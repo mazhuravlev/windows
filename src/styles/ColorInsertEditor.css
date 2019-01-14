@@ -56,13 +56,13 @@ p, img {
   position: absolute;
   display: block;
   content: '';
-  width: 50px;
+  width: 60px;
   height: 4px;
-  background-color: red;
+  background-color: black;
   transform: rotate(45deg);
   left: 50%;
   top: 50%;
-  margin-left: -25px;
+  margin-left: -30px;
   margin-top: -2px;
 }
 
