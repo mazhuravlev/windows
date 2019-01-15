@@ -74,8 +74,28 @@
 
 .texture-panel-container .preview-list .preview-history {
   width: 100%;
-  height: 30px;
+  height: 60px;
   background-color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.texture-panel-container .preview-list .preview-history .preview-history-item {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.texture-panel-container .preview-list .preview-history .preview-history-item:hover{
+  border: 2px solid gray;
+}
+
+.texture-panel-container .preview-list .preview-history .preview-history-item img {
+  width: 100%;
+  height: 100%;
 }
 
 .texture-panel-container .preview-list p{
