@@ -1,6 +1,4 @@
 import * as React from 'react';
-// tslint:disable-next-line:import-name
-// import * as FileInput from 'react-file-input';
 import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -9,7 +7,7 @@ import '../styles/TexturePanel.css';
 
 import texturesIconSvg from '../static/icons/texturesIcon.svg';
 
-import { IPartOfTexture, ISectorTexture, ITexture, ITextureList } from '../interface';
+import { ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
@@ -33,11 +31,13 @@ interface IProps {
 
 interface IState {
   previewList: ITexture[];
+  previewListShow: boolean;
 }
 
 class Texture extends React.Component<IProps, IState> {
   public state: IState = {
     previewList: [],
+    previewListShow: false,
   };
 
   public handleKey = (key: string) => {
@@ -106,20 +106,21 @@ class Texture extends React.Component<IProps, IState> {
   }
 
   public handlePreviewClick = (event: React.FormEvent<HTMLDivElement>) => {
-    const textureItem: ISectorTexture = {
-      ...this.props.texture,
-      VOffset: 0,
-      HOffset: 0,
-      sectorId: String(this.props.currentSector),
-    };
-    this.props.addTextureItem(textureItem);
-    this.props.setTexture({
-      VOffset: 0,
-      HOffset: 0,
-    } as IPartOfTexture);
+    // const textureItem: ISectorTexture = {
+    //   ...this.props.texture,
+    //   VOffset: 0,
+    //   HOffset: 0,
+    //   sectorId: String(this.props.currentSector),
+    // };
+    // this.props.addTextureItem(textureItem);
+    // this.props.setTexture({
+    //   VOffset: 0,
+    //   HOffset: 0,
+    // } as IPartOfTexture);
+    this.setState({ previewListShow: !this.state.previewListShow });
   }
 
-  public handlePreviewListClick = (texture: ITexture) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+  public handlePreviewListClick = (texture: ITexture) => (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
     this.props.setTexture(texture);
     this.props.addTextureItem({ ...texture, sectorId: String(this.props.currentSector) });
@@ -130,12 +131,14 @@ class Texture extends React.Component<IProps, IState> {
   public renderTextureList() {
     return (
       <div className="texture-panel-container-item preview-list">
+        <div className="preview-history">
+          <p><b>Загруженные текстуры</b></p>
+        </div>
         {
           this.state.previewList.map((item, i) => (
-            <div key={i} className="preview-list-item">
-              <a onClick={this.handlePreviewListClick(item)} href="#">
-                <img src={item.url as string} alt=""/>
-              </a>
+            <div onClick={this.handlePreviewListClick(item)}  className="preview-list-item" key={i} >
+              <img src={item.url as string} alt=""/>
+              <p>{item.fileName}</p>
             </div>
           ))
         }
@@ -203,9 +206,9 @@ class Texture extends React.Component<IProps, IState> {
         <div className="texture-panel-container-item">
           <div onClick={this.handlePreviewClick} className="imgPreview">
             {imagePreview}
+            {this.state.previewListShow ? this.renderTextureList() : null}
           </div>
         </div>
-        {this.state.previewList.length ? this.renderTextureList() : null}
       </div>
     );
   }

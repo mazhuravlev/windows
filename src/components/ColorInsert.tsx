@@ -108,7 +108,6 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public handleBasketClick = (event: React.FormEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    // event.stopPropagation();
     if (this.props.currentSector === 0) return;
     this.props.removeTextureItem({ sectorId: String(this.props.currentSector) });
     this.props.setTexture({

@@ -1,4 +1,5 @@
 .preview-container {
+  /* overflow: hidden; */
   position: absolute;
   display: grid;
   justify-items: stretch;
