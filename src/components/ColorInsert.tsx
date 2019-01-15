@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 
-import { ISectorList, ISideSize, ITexture, ITextureList } from '../interface';
+import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -16,6 +16,7 @@ import saveIconSvg from '../static/icons/saveIcon.svg';
 
 import * as sectorEnteties from '../redux/currentSector';
 import * as textureEnteties from '../redux/texture';
+import * as textureListEnteties from '../redux/textureList';
 
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
@@ -37,6 +38,7 @@ interface IProps {
   currentSector: number;
   setCurrentSector: (sectorId: number) => void;
   setTexture: (texture: textureEnteties.ITextureState) => void;
+  addTextureItem: (sectorTexture: ISectorTexture) => void;
 }
 
 class ColorInsert extends React.Component<IProps, IState> {
@@ -77,15 +79,15 @@ class ColorInsert extends React.Component<IProps, IState> {
   }
 
   public handlePreviewClick = (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => {
-    const { setCurrentSector, textureList, texture } = this.props;
+    event.stopPropagation();
+    const { setCurrentSector, textureList } = this.props;
     setCurrentSector(Number(sectorId));
     if (textureList[sectorId]) {
       this.props.setTexture(textureList[sectorId]);
     } else {
-      this.props.setTexture({
-        ...texture,
-        VOffset: 0,
-        HOffset: 0,
+      this.props.addTextureItem({
+        ...this.props.texture,
+        sectorId,
       });
     }
   }
@@ -134,6 +136,15 @@ class ColorInsert extends React.Component<IProps, IState> {
     }
   }
 
+  public ResetFocus = (event: React.FormEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    this.props.setCurrentSector(0);
+    this.props.setTexture({
+      VOffset: 0,
+      HOffset: 0,
+    } as IPartOfTexture);
+  }
+
   public renderSavePanel() {
     return (
       <div className="save-panel">
@@ -168,7 +179,7 @@ class ColorInsert extends React.Component<IProps, IState> {
   public render() {
     const { textureType, rootType } = this.state;
     return (
-      <div className="app-container">
+      <div className="app-container" onClick={this.ResetFocus}>
         <div className="container-item options">
           {this.renderSavePanel()}
           <div className="type-toggle">
@@ -210,6 +221,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   setCurrentSector: sectorEnteties.setCurrentSector,
   setTexture: textureEnteties.setTexture,
+  addTextureItem: textureListEnteties.addTextureItem,
 };
 
 const ColorInsertEditor = connect(mapStateToProps, mapDispatchToProps)(ColorInsert);

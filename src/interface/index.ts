@@ -12,13 +12,19 @@ export interface ISectorList {
 }
 
 export interface ITexture {
-  url: string;
-  fileName: string;
-  HOffset: number;
-  VOffset: number;
-  width: number;
-  height: number;
+  url: string | number;
+  fileName: string | number;
+  HOffset: string | number;
+  VOffset: string | number;
+  width: string | number;
+  height: string | number;
 }
+
+type textureKeyType = keyof ITexture;
+
+export type IPartOfTexture = {
+  [index in textureKeyType]: string | number;
+};
 
 export interface ISectorTexture extends ITexture {
   sectorId: string;

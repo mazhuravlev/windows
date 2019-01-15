@@ -117,7 +117,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
             >
               <div
                 className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`}`}
-                style={getGridItemSize(sectorNumber, side, windowType, step)}
+                style={getGridItemSize(sectorNumber, side, windowType, step, props.gridHide)}
               >
                 {''}
               </div>

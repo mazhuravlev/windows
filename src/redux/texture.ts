@@ -1,4 +1,4 @@
-import { ITexture } from '../interface';
+import { IPartOfTexture, ITexture } from '../interface';
 /*
     STATE
 */
@@ -23,15 +23,10 @@ type SET = typeof SET;
 /*
     ACTIONS CONST
 */
-// type textureKeyType = keyof ITextureState;
-
-// interface IPayload {
-//   [key: in keyof ITextureState]: string | number;
-// }
 
 export interface ISetTexture {
   type: SET;
-  payload: ITextureState;
+  payload: IPartOfTexture;
 }
 
 export type TextureAction = ISetTexture;
@@ -44,7 +39,7 @@ export default function reducer(state: ITextureState = initState, action: Textur
   : ITextureState {
   switch (action.type) {
     case SET: {
-      return { ...action.payload };
+      return { ...state, ...action.payload } as ITexture;
     }
     default:
       return state;
@@ -55,7 +50,7 @@ export default function reducer(state: ITextureState = initState, action: Textur
     ACTION CREATORS
 */
 
-export const setTexture = (payload: ITextureState): ISetTexture => ({
+export const setTexture = (payload: IPartOfTexture): ISetTexture => ({
   payload,
   type: SET,
 });

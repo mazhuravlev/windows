@@ -17,7 +17,7 @@ interface IProps {
 const getTextureSize = (textureType: string, texture: ITexture, ratio: number): string => {
   return `${textureType === BRICK ?
     `${texture.width}px ${texture.height}px`
-    : `${texture.width * ratio}px ${texture.height * ratio}px`}`;
+    : `${texture.width as number * ratio}px ${texture.height as number * ratio}px`}`;
 };
 
 const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
@@ -37,7 +37,7 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
       ...styleObj,
       backgroundImage: `url(${url})`,
       backgroundSize: getTextureSize(props.textureType, texture, TILE_SIZE / BRICK_SIZE),
-      backgroundPosition: `left ${HOffset * step}px top ${VOffset * step}px`,
+      backgroundPosition: `left ${HOffset as number * step}px top ${VOffset as number * step}px`,
     };
   }
   return (

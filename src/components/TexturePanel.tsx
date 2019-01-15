@@ -1,4 +1,6 @@
 import * as React from 'react';
+// tslint:disable-next-line:import-name
+// import * as FileInput from 'react-file-input';
 import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -7,7 +9,7 @@ import '../styles/TexturePanel.css';
 
 import texturesIconSvg from '../static/icons/texturesIcon.svg';
 
-import { ISectorTexture, ITexture, ITextureList } from '../interface';
+import { IPartOfTexture, ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
@@ -42,16 +44,16 @@ class Texture extends React.Component<IProps, IState> {
     const { texture } = this.props;
     switch (key) {
       case 'down':
-        this.handleOffsetInput('VOffset')(texture.VOffset - 1);
+        this.handleOffsetInput('VOffset')(texture.VOffset as number - 1);
         break;
       case 'up':
-        this.handleOffsetInput('VOffset')(texture.VOffset + 1);
+        this.handleOffsetInput('VOffset')(texture.VOffset as number + 1);
         break;
       case 'right':
-        this.handleOffsetInput('HOffset')(texture.HOffset + 1);
+        this.handleOffsetInput('HOffset')(texture.HOffset as number + 1);
         break;
       case 'left':
-        this.handleOffsetInput('HOffset')(texture.HOffset - 1);
+        this.handleOffsetInput('HOffset')(texture.HOffset as number - 1);
         break;
       default:
         return;
@@ -101,7 +103,7 @@ class Texture extends React.Component<IProps, IState> {
     if (file) reader.readAsDataURL(file);
   }
 
-  public handlePreviewClick = () => {
+  public handlePreviewClick = (event: React.FormEvent<HTMLDivElement>) => {
     const textureItem: ISectorTexture = {
       ...this.props.texture,
       VOffset: 0,
@@ -110,16 +112,18 @@ class Texture extends React.Component<IProps, IState> {
     };
     this.props.addTextureItem(textureItem);
     this.props.setTexture({
-      ...this.props.texture,
       VOffset: 0,
       HOffset: 0,
-    });
+    } as IPartOfTexture);
   }
 
   public handlePreviewListClick = (texture: ITexture) => (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     this.props.setTexture(texture);
+    this.props.addTextureItem({ ...texture, sectorId: String(this.props.currentSector) });
   }
+
+  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
 
   public renderTextureList() {
     return (
@@ -128,7 +132,7 @@ class Texture extends React.Component<IProps, IState> {
           this.state.previewList.map((item, i) => (
             <div key={i} className="preview-list-item">
               <a onClick={this.handlePreviewListClick(item)} href="#">
-                <img src={item.url} alt=""/>
+                <img src={item.url as string} alt=""/>
               </a>
             </div>
           ))
@@ -142,14 +146,13 @@ class Texture extends React.Component<IProps, IState> {
       <KeyboardEventHandler
           handleKeys={['left', 'right', 'up', 'down']}
           handleFocusableElements={true}
-          // tslint:disable-next-line:jsx-no-lambda
           onKeyEvent={this.handleKey}/>
     );
   }
 
   public render() {
     const { texture } = this.props;
-    const imagePreviewUrl = texture.url;
+    const imagePreviewUrl = texture.url as string;
     let imagePreview = null;
     if (imagePreviewUrl) {
       imagePreview = (<img src={imagePreviewUrl} />);
@@ -158,25 +161,28 @@ class Texture extends React.Component<IProps, IState> {
     }
 
     return (
-      <div className="texture-panel-container">
+      <div onClick={this.handlePropagation} className="texture-panel-container">
         {this.renderKeyControlComponent()}
         <a className="texture-panel-container-item" href="#">
           <img className="icon" src={texturesIconSvg} alt=""/>
         </a>
+        <div className="custom-file">
+          <input
+              className="custom-file-input"
+              type="file"
+              onChange={this.handleImageChange}
+              // onClick={this.resetFileInput}
+          />
+        </div>
         <p className="texture-panel-container-item texture-name">Текстура: {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}</p>
         <div className="texture-panel-container-item">
-          <input className="fileInput"
-            type="file"
-            onChange={this.handleImageChange}
-            onClick={this.resetFileInput}
-          />
           <div style={{ flexDirection: 'row', display: 'flex' }}>
             <UncontrolledTooltip
               target="horizontal-shift">Сдвиг по горизонтали</UncontrolledTooltip>
             <NumberInput
               id="horizontal-shift"
               style={{ position: 'relative', marginLeft: '15px' }}
-              value={this.props.texture.HOffset}
+              value={this.props.texture.HOffset as number}
               min={-10}
               max={10}
               onChange={this.handleOffsetInput('HOffset')}
@@ -185,7 +191,7 @@ class Texture extends React.Component<IProps, IState> {
             <NumberInput
               id="vertical-shift"
               style={{ position: 'relative' }}
-              value={this.props.texture.VOffset}
+              value={this.props.texture.VOffset as number}
               min={-10}
               max={10}
               onChange={this.handleOffsetInput('VOffset')}

@@ -57,7 +57,8 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
   }
 };
 
-export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType: string, step: number): ISize => {
+export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType: string, step: number, hide: boolean): ISize => {
+  if (hide) return { width: 1, height: 1 };
   switch (sector) {
     case 1: {
       const width = 120 - sideSize.leftMargin * step;
