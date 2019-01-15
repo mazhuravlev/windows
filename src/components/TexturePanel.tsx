@@ -95,7 +95,9 @@ class Texture extends React.Component<IProps, IState> {
         ...texture,
         sectorId: String(currentSector),
       };
-      this.props.addTextureItem(textureItem);
+      if (currentSector > 0) {
+        this.props.addTextureItem(textureItem);
+      }
       this.props.setTexture(texture);
       this.setState({ previewList: [...this.state.previewList, texture] });
     };

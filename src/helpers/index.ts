@@ -1,4 +1,4 @@
-import { INumObjType, ISideSize, ISize } from '../interface';
+import { INumObjType, ISideSize, ISize, ITexture } from '../interface';
 import { WINDOW } from '../static';
 
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
@@ -58,7 +58,7 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
 };
 
 export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType: string, step: number, hide: boolean): ISize => {
-  if (hide) return { width: 1, height: 1 };
+  if (hide) return { width: 0, height: 0 };
   switch (sector) {
     case 1: {
       const width = 120 - sideSize.leftMargin * step;
@@ -135,4 +135,9 @@ export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType:
 
 export const getRealSectorSize = (sector: number, sideSize: ISideSize, windowType: string, step: number) => {
   document.getElementsByClassName('sector1');
+};
+
+export const isEmptyTexture = (texture: ITexture): boolean => {
+  const { url, fileName } = texture;
+  return url === '' && fileName === '';
 };

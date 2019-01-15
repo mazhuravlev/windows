@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'reactstrap';
@@ -11,6 +12,7 @@ import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, IText
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
+import basketIconSvg from '../static/icons/basketIcon.svg';
 import gridIconSvg from '../static/icons/gridIcon.svg';
 import saveIconSvg from '../static/icons/saveIcon.svg';
 
@@ -18,6 +20,7 @@ import * as sectorEnteties from '../redux/currentSector';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
+import { isEmptyTexture } from '../helpers';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
 import TexturePanel from './TexturePanel';
@@ -39,6 +42,7 @@ interface IProps {
   setCurrentSector: (sectorId: number) => void;
   setTexture: (texture: textureEnteties.ITextureState) => void;
   addTextureItem: (sectorTexture: ISectorTexture) => void;
+  removeTextureItem: (sectorId: { sectorId: string }) => void;
 }
 
 class ColorInsert extends React.Component<IProps, IState> {
@@ -78,16 +82,21 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public handlePreviewClick = (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handlePreviewClick = (sectorNumber: string) => (event: React.FormEvent<HTMLDivElement>) => {
     event.stopPropagation();
     const { setCurrentSector, textureList } = this.props;
-    setCurrentSector(Number(sectorId));
-    if (textureList[sectorId]) {
-      this.props.setTexture(textureList[sectorId]);
-    } else {
+    setCurrentSector(Number(sectorNumber));
+    if (textureList[sectorNumber]) {
+      const { sectorId, ...texture } = textureList[sectorNumber];
+      this.props.setTexture(texture as ITexture);
+      return;
+    }
+    if (!isEmptyTexture(this.props.texture)) {
       this.props.addTextureItem({
+        sectorId: sectorNumber,
         ...this.props.texture,
-        sectorId,
+        VOffset: 0,
+        HOffset: 0,
       });
     }
   }
@@ -96,6 +105,19 @@ class ColorInsert extends React.Component<IProps, IState> {
     const { value } = event.currentTarget;
     this.setState({ colorInsertName: value });
   }
+
+  public handleBasketClick = (event: React.FormEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    // event.stopPropagation();
+    if (this.props.currentSector === 0) return;
+    this.props.removeTextureItem({ sectorId: String(this.props.currentSector) });
+    this.props.setTexture({
+      VOffset: 0,
+      HOffset: 0,
+    } as IPartOfTexture);
+  }
+
+  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
 
   public saveColorInsertToJSON = () => {
     const id = uuid();
@@ -159,7 +181,7 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public renderTools() {
     return (
-      <div className="container-control-buttons" style={{ gridArea: 'tools' }}>
+      <div onClick={this.handlePropagation} className="container-control-buttons" style={{ gridArea: 'tools' }}>
         <a
           href="#"
           onClick={this.handleGridHide}
@@ -172,6 +194,13 @@ class ColorInsert extends React.Component<IProps, IState> {
           onClick={this.windowTypeToggle}
           className={`window-icon ${this.state.windowType === DOUBLE_WINDOW ? '' : 'double-window'}`}
         />
+        <a
+          href="#"
+          onClick={this.handleBasketClick}
+          className="basket-icon"
+        >
+          <img className="icon" src={basketIconSvg} alt=""/>
+        </a>
       </div>
     );
   }
@@ -222,6 +251,7 @@ const mapDispatchToProps = {
   setCurrentSector: sectorEnteties.setCurrentSector,
   setTexture: textureEnteties.setTexture,
   addTextureItem: textureListEnteties.addTextureItem,
+  removeTextureItem: textureListEnteties.removeTextureItem,
 };
 
 const ColorInsertEditor = connect(mapStateToProps, mapDispatchToProps)(ColorInsert);

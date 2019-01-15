@@ -17,7 +17,7 @@ const initState = {
     TYPE CONST
 */
 
-const SET = 'SET_TUXTURE_URL';
+const SET = 'SET_TUXTURE';
 type SET = typeof SET;
 
 /*
