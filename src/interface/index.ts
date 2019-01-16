@@ -1,10 +1,13 @@
+import { BRICK, DOUBLE_WINDOW, TILE, WINDOW } from '../static';
+
 export interface IParams {
   width: number;
   padding: number;
 }
 
+type rootType = 'sector' | 'window';
 export interface ISector extends IParams {
-  id: string;
+  id: number;
 }
 
 export interface ISectorList {
@@ -12,26 +15,23 @@ export interface ISectorList {
 }
 
 export interface ITexture {
-  url: string | number;
-  fileName: string | number;
-  HOffset: string | number;
-  VOffset: string | number;
-  width: string | number;
-  height: string | number;
+  url: string;
+  fileName: string;
+  HOffset: number;
+  VOffset: number;
+  width: number;
+  height: number;
 }
 
-type textureKeyType = keyof ITexture;
-
-export type IPartOfTexture = {
-  [index in textureKeyType]: string | number;
-};
+export type IPartOfTexture = Partial<ITexture>;
 
 export interface ISectorTexture extends ITexture {
-  sectorId: string;
+  sectorId: number;
+  root: rootType;
 }
 
 export interface ITextureList {
-  [secotId: string]: ISectorTexture;
+  [secotId: number]: ISectorTexture;
 }
 
 export interface ISize {
@@ -63,3 +63,7 @@ export interface INumObjType {
 export interface IStyleObj {
   [key: string]: string | number;
 }
+
+export type WindowType = typeof WINDOW | typeof DOUBLE_WINDOW;
+
+export type TextureType = typeof BRICK | typeof TILE;

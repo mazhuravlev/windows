@@ -63,13 +63,17 @@ class Texture extends React.Component<IProps, IState> {
   }
 
   public handleOffsetInput = (offsetType: string) => (value: number) => {
+    const { textureList, currentSector } = this.props;
     const texture = {
       ...this.props.texture,
       [offsetType]: value,
     };
+
+    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
     const textureItem: ISectorTexture = {
       ...texture,
-      sectorId: String(this.props.currentSector),
+      sectorId: this.props.currentSector,
+      root: rootType,
     };
     this.props.addTextureItem(textureItem);
     this.props.setTexture(texture);
@@ -82,34 +86,35 @@ class Texture extends React.Component<IProps, IState> {
   public handleImageChange = (event: any) => {
     event.preventDefault();
     const { files } = event.target;
-    if (files.length > 0) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < files.length; i += 1) {
-        const file = files[i];
-        const reader = new FileReader();
+    if (files.length === 0) return;
 
-        reader.onloadend = async () => {
-          const { currentSector } = this.props;
-          const imgSize = await getMeta(reader.result);
-          const texture = {
-            ...this.props.texture,
-            ...imgSize,
-            url: reader.result as string,
-            fileName: file.name,
-          };
-          const textureItem: ISectorTexture = {
-            ...texture,
-            sectorId: String(currentSector),
-          };
-          if (currentSector > 0) {
-            this.props.addTextureItem(textureItem);
-          }
-          this.props.setTexture(texture);
-          this.setState({ previewList: [...this.state.previewList, texture] });
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < files.length; i += 1) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        const { currentSector } = this.props;
+        const imgSize = await getMeta(reader.result);
+        const texture = {
+          ...this.props.texture,
+          ...imgSize,
+          url: reader.result as string,
+          fileName: file.name,
         };
+        const textureItem: ISectorTexture = {
+          ...texture,
+          sectorId: currentSector,
+          root: 'sector',
+        };
+        if (currentSector > 0) {
+          this.props.addTextureItem(textureItem);
+        }
+        this.props.setTexture(texture);
+        this.setState({ previewList: [...this.state.previewList, texture] });
+      };
 
-        reader.readAsDataURL(files[i]);
-      }
+      reader.readAsDataURL(files[i]);
     }
   }
 
@@ -119,8 +124,10 @@ class Texture extends React.Component<IProps, IState> {
 
   public handleHisoryListClick = (texture: ITexture) => (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
+    const { textureList, currentSector } = this.props;
+    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
     this.props.setTexture(texture);
-    this.props.addTextureItem({ ...texture, sectorId: String(this.props.currentSector) });
+    this.props.addTextureItem({ ...texture, sectorId: this.props.currentSector, root: rootType });
   }
 
   public handlePreviewListClick = (texture: ITexture) => (event: React.FormEvent<HTMLDivElement>) => {
@@ -140,12 +147,14 @@ class Texture extends React.Component<IProps, IState> {
   public renderTextureList() {
     return (
       <div className="texture-panel-container-item preview-list">
-        <div className="preview-history">
-          {this.state.previewListHisory.map((texture, i) => (
-            <div onClick={this.handleHisoryListClick(texture)} key={i} className="preview-history-item">
-              <img src={texture.url as string} alt=""/>
-            </div>
-          ))}
+        <div className="preview-history-wrapper">
+          <div className="preview-history">
+            {this.state.previewListHisory.map((texture, i) => (
+              <div onClick={this.handleHisoryListClick(texture)} key={i} className="preview-history-item">
+                <img src={texture.url as string} alt=""/>
+              </div>
+            ))}
+          </div>
         </div>
         {
           this.state.previewList.map((item, i) => (
@@ -191,7 +200,7 @@ class Texture extends React.Component<IProps, IState> {
               onChange={this.handleImageChange}
               multiple={true}
               required={true}
-              // onClick={this.resetFileInput}
+              onClick={this.resetFileInput}
           />
         </div>
         <p className="texture-panel-container-item texture-name">Текстура: {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}</p>

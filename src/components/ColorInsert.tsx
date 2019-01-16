@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 
-import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList } from '../interface';
+import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, TextureType, WindowType } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -20,16 +20,17 @@ import * as sectorEnteties from '../redux/currentSector';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
-import { isEmptyTexture } from '../helpers';
+import { getSectorSizeInMM, isEmptyTexture } from '../helpers';
+import { getOffsetInWindowAxes, getWindowSize } from '../helpers/coordinateСonverter';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
 import TexturePanel from './TexturePanel';
 
 interface IState {
   sectorList: ISectorList;
-  textureType: string;
+  textureType: TextureType;
   rootType: string;
-  windowType: string;
+  windowType: WindowType;
   gridHide: boolean;
   colorInsertName: string;
 }
@@ -40,7 +41,7 @@ interface IProps {
   textureList: ITextureList;
   currentSector: number;
   setCurrentSector: (sectorId: number) => void;
-  setTexture: (texture: textureEnteties.ITextureState) => void;
+  setTexture: (texture: IPartOfTexture) => void;
   addTextureItem: (sectorTexture: ISectorTexture) => void;
   removeTextureItem: (sectorId: { sectorId: string }) => void;
 }
@@ -63,15 +64,21 @@ class ColorInsert extends React.Component<IProps, IState> {
   public textureTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     this.setState({
-      textureType: value,
+      textureType: value as TextureType,
     });
   }
 
   public rootTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
+    if (this.props.currentSector === 0) return;
     const { value } = event.currentTarget;
-    this.setState({
-      rootType: value,
-    });
+    const { textureList } = this.props;
+
+    if (!textureList[this.props.currentSector]) return;
+
+    const oldItem = textureList[this.props.currentSector];
+
+    const newItem = { ...oldItem, root: value };
+    this.props.addTextureItem(newItem as ISectorTexture);
   }
 
   public windowTypeToggle = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -82,7 +89,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public handlePreviewClick = (sectorNumber: string) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handlePreviewClick = (sectorNumber: number) => (event: React.FormEvent<HTMLDivElement>) => {
     event.stopPropagation();
     const { setCurrentSector, textureList } = this.props;
     setCurrentSector(Number(sectorNumber));
@@ -97,6 +104,7 @@ class ColorInsert extends React.Component<IProps, IState> {
         ...this.props.texture,
         VOffset: 0,
         HOffset: 0,
+        root: 'sector',
       });
     }
   }
@@ -113,7 +121,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     this.props.setTexture({
       VOffset: 0,
       HOffset: 0,
-    } as IPartOfTexture);
+    });
   }
 
   public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
@@ -121,40 +129,46 @@ class ColorInsert extends React.Component<IProps, IState> {
   public saveColorInsertToJSON = () => {
     const id = uuid();
     const { side, textureList } = this.props;
-    const { colorInsertName } = this.state;
-    const sectorsId = Object.keys(this.state.sectorList);
-    if (colorInsertName.length === 0) {
-      alert('Введите имя текстуры!');
-    } else {
-      const sectors = document.getElementsByClassName('preview-container-item');
-      const sectorsSize = sectorsId.reduce((acc, sectorId) => {
-        const newItem = { [sectorId]: {
-          width: sectors[Number(sectorId) - 1].clientWidth,
-          height: sectors[Number(sectorId) - 1].clientHeight,
-        },
-        };
-        return { ...acc, ...newItem };
-      },                                   {});
+    const { colorInsertName, sectorList, textureType } = this.state;
 
-      const sectorParams = sectorsId.map((sectorId) => {
-        const texture = textureList[sectorId];
-        if (texture) {
-          return { sector: sectorId, ...texture, ...sectorsSize[sectorId] };
+    const sectorsId = Object.keys(sectorList);
+
+    if (colorInsertName.length === 0) return;
+
+    const sectors = document.getElementsByClassName('preview-container-item');
+    const sectorsParams = sectorsId.reduce((acc, sectorId) => {
+      const newItem = { [sectorId]: {
+        width: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientWidth, textureType),
+        height: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientHeight, textureType),
+        root: textureList[sectorId] ? textureList[sectorId].root : 'sector',
+      },
+      };
+      return { ...acc, ...newItem };
+    },                                     {});
+
+    const sectorParams = sectorsId.map((sectorId) => {
+      const texture = textureList[sectorId];
+      if (texture) {
+        if (textureList[sectorId].root === 'window') {
+          const windowParams = getWindowSize(this.state.windowType, this.state.textureType);
+          const offset = getOffsetInWindowAxes(texture, side, windowParams);
+          return { sector: sectorId, ...texture, ...offset, ...sectorsParams[sectorId] };
         }
-        const emptyTexture = {
-          url: '',
-          fileName: '',
-          HOffset: 0,
-          VOffset: 0,
-          width: 0,
-          height: 0,
-        };
-        return { sector: sectorId, ...emptyTexture, ...sectorsSize[sectorId] };
-      });
+        return { sector: sectorId, ...texture, ...sectorsParams[sectorId] };
+      }
+      const emptyTexture = {
+        url: '',
+        fileName: '',
+        HOffset: 0,
+        VOffset: 0,
+        width: 0,
+        height: 0,
+      };
+      return { sector: sectorId, ...emptyTexture, ...sectorsParams[sectorId] };
+    });
 
-      const result = { id, name: colorInsertName, ...side, sectors: sectorParams };
-      alert(JSON.stringify(result));
-    }
+    const result = { id, name: colorInsertName, ...side, sectors: sectorParams };
+    console.log(JSON.stringify(result));
   }
 
   public ResetFocus = (event: React.FormEvent<HTMLDivElement>) => {
@@ -163,7 +177,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     this.props.setTexture({
       VOffset: 0,
       HOffset: 0,
-    } as IPartOfTexture);
+    });
   }
 
   public renderSavePanel() {
@@ -205,7 +219,9 @@ class ColorInsert extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { textureType, rootType } = this.state;
+    const { textureType } = this.state;
+    const { currentSector, textureList } = this.props;
+    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
     return (
       <div className="app-container" onClick={this.ResetFocus}>
         <div className="container-item options">
@@ -215,7 +231,7 @@ class ColorInsert extends React.Component<IProps, IState> {
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={BRICK} checked={textureType === BRICK}/> Кирпич</p>
               <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={TILE} checked={textureType === TILE}/> Плитка</p>
           </div>
-          <div className="type-toggle">
+          <div onClick={this.handlePropagation} className="type-toggle">
               <p>Параметры привязки:</p>
               <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'sector'} checked={rootType === 'sector'}/> Сектор</p>
               <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'window'} checked={rootType === 'window'}/> Окно</p>

@@ -117,3 +117,49 @@
   top: 0;
   border: 1px solid black;
 }
+
+.preview-container .arrow::after {
+  display: block;
+  z-index: 20;
+  content: '';
+
+  position: absolute;
+  left: 20px;
+  bottom: 0;
+
+  width: 0;
+  height: 0;
+
+  border-left: 20px solid transparent;
+  border-top: 10px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 10px solid transparent;
+  
+  border-left-color: black;
+  border-right: 0;
+
+  transform: translateY(50%);
+}
+
+.preview-container .arrow::before {
+  display: block;
+  z-index: 20;
+  content: '';
+
+  position: absolute;
+  left: -10px;
+  bottom: 20px;
+
+  width: 0;
+  height: 0;
+
+  border-left: 20px solid transparent;
+  border-top: 10px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 10px solid transparent;
+  
+  border-left-color: black;
+  border-right: 0;
+
+  transform: rotate(-90deg);
+}

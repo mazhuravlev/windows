@@ -1,5 +1,5 @@
-import { INumObjType, ISideSize, ISize, ITexture } from '../interface';
-import { WINDOW } from '../static';
+import { INumObjType, ISideSize, ISize, ITexture, TextureType } from '../interface';
+import { BRICK, BRICK_SIZE, TILE_SIZE, WINDOW } from '../static';
 
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
   return Object.keys(sizeObj).reduce((acc, key) =>
@@ -140,4 +140,9 @@ export const getRealSectorSize = (sector: number, sideSize: ISideSize, windowTyp
 export const isEmptyTexture = (texture: ITexture): boolean => {
   const { url, fileName } = texture;
   return url === '' && fileName === '';
+};
+
+export const getSectorSizeInMM = (sizeInPx: number, textureType: TextureType): number => {
+  const itemCount = sizeInPx / (textureType === BRICK ? BRICK_SIZE : TILE_SIZE);
+  return itemCount * (textureType === BRICK ? 75 : 100);
 };

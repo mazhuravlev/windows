@@ -56,6 +56,12 @@ const getPreviewPosition = (side: ISideSize, step: number) => {
   return { top, left };
 };
 
+const getArrow = (selectedSector: number, sectorId: number, textureList: ITextureList, rootType: string): string => {
+  if (selectedSector !== sectorId) return '';
+  if (!textureList[selectedSector]) return 'arrow';
+  return textureList[selectedSector].root === rootType ? 'arrow' : '';
+};
+
 interface IProps {
   sectorList: ISectorList;
   textureType: string;
@@ -64,7 +70,7 @@ interface IProps {
   textureList: ITextureList;
   currentSector: number;
   gridHide: boolean;
-  handleClick: (sectorId: string) => (event: React.FormEvent<HTMLDivElement>) => void;
+  handleClick: (sectorId: number) => (event: React.FormEvent<HTMLDivElement>) => void;
 }
 
 const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
@@ -108,7 +114,8 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               step={step}
               className={
                 `preview-container-item
-                sector${sectorNumber}`}
+                sector${sectorNumber}
+                ${getArrow(props.currentSector, sectorNumber, props.textureList, 'sector')}`}
               sectorSize={size}
               currentSector={props.currentSector}
               textureList={props.textureList}
@@ -116,7 +123,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               gridArea={shiftGridPosition(sectorNumber, window.padding)}
             >
               <div
-                className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`}`}
+                className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`} `}
                 style={getGridItemSize(sectorNumber, side, windowType, step, props.gridHide)}
               >
                 {''}
@@ -125,7 +132,11 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
           );
         })
       }
-      <Window margin={marginWindow1} {...sizeWindow1} step={step} className="window1" />
+      <Window
+        margin={marginWindow1}
+        {...sizeWindow1}
+        step={step}
+        className={'window1'} />
       <Window margin={marginWindow2}{...sizeWindow2} step={step} className="window2" />
     </div>
   );
