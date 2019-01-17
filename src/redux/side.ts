@@ -5,7 +5,7 @@ import { ISideSize } from '../interface';
 */
 
 export type ISideState = ISideSize;
-const initState: ISideState = {
+export const initState: ISideState = {
   bottomWidth: 3,
   bottomMargin: 0,
   leftWidth: 3,
@@ -25,11 +25,8 @@ const initState: ISideState = {
 const SET = 'SET_SIDE_SIZE';
 type SET = typeof SET;
 
-export type SideItemType = keyof ISideState;
-export interface ISideSetType {
-  name: SideItemType;
-  value: number;
-}
+export type ISideSetType = Partial<ISideState>;
+
 /*
     ACTIONS CONST
 */
@@ -48,7 +45,7 @@ export default function reducer(state: ISideState = initState, action: SideActio
   switch (action.type) {
     case SET: {
       const newSize = action.payload;
-      return { ...state, [newSize.name]: newSize.value };
+      return { ...state, ...newSize };
     }
     default:
       return state;

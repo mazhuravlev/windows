@@ -17,6 +17,7 @@ import gridIconSvg from '../static/icons/gridIcon.svg';
 import saveIconSvg from '../static/icons/saveIcon.svg';
 
 import * as sectorEnteties from '../redux/currentSector';
+import * as sideEnteties from '../redux/side';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
@@ -44,6 +45,7 @@ interface IProps {
   setTexture: (texture: IPartOfTexture) => void;
   addTextureItem: (sectorTexture: ISectorTexture) => void;
   removeTextureItem: (sectorId: { sectorId: string }) => void;
+  setSideSize: (size: sideEnteties.ISideSetType) => void;
 }
 
 class ColorInsert extends React.Component<IProps, IState> {
@@ -63,6 +65,7 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public textureTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
+    this.props.setSideSize(sideEnteties.initState);
     this.setState({
       textureType: value as TextureType,
     });
@@ -228,6 +231,7 @@ const mapDispatchToProps = {
   setTexture: textureEnteties.setTexture,
   addTextureItem: textureListEnteties.addTextureItem,
   removeTextureItem: textureListEnteties.removeTextureItem,
+  setSideSize: sideEnteties.setSideSize,
 };
 
 const ColorInsertEditor = connect(mapStateToProps, mapDispatchToProps)(ColorInsert);

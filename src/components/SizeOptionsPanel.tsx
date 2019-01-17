@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { ISideSize } from '../interface';
+import { ISideSize, TextureType } from '../interface';
 
 import * as sideEnteties from '../redux/side';
 import { IStore } from '../store';
@@ -12,7 +12,7 @@ import SideOption from './SideOption';
 
 interface IProps {
   side: ISideSize;
-  textureType: string;
+  textureType: TextureType;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
 }
 
@@ -20,8 +20,22 @@ export class SizeOptionsPanel extends React.Component<IProps> {
 
   public handleInput = (sideName: string) => (value: number) => {
     const { setSideSize } = this.props;
-    const name = sideName as sideEnteties.SideItemType;
-    setSideSize({ name, value });
+    const newItem = { [sideName]: value };
+    if (this.checkPreviewOverflow(newItem)) return;
+
+    setSideSize(newItem);
+  }
+
+  public checkPreviewOverflow(newVal: Partial<ISideSize>) {
+    const { side, textureType } = this.props;
+    const newSide = { ...side, ...newVal };
+    const maxSideSize = textureType === 'brick' ? 8 : 6;
+    return [
+      newSide.leftMargin + newSide.leftWidth > maxSideSize,
+      newSide.topMargin + newSide.topWidth > maxSideSize,
+      newSide.rightMargin + newSide.rightWidth > maxSideSize,
+      newSide.bottomMargin + newSide.bottomWidth > maxSideSize,
+    ].some(item => item);
   }
 
   public render() {
