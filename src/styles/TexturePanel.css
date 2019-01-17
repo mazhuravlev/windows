@@ -26,9 +26,24 @@
   opacity: 0;
 }
 
-.texture-panel-container .custom-file input {
+.texture-panel-container .custom-file-input {
+  display: block;
   width: 40px;
   height: 40px;
+}
+
+.texture-panel-container .custom-file-input::after {
+  display: block;
+  content: '';
+ 
+  position: absolute;
+  top: 0;
+  z-index: 50;
+
+  width: 40px;
+  height: 40px;
+
+  cursor: pointer;
 }
 
 .texture-panel-container .imgPreview {
