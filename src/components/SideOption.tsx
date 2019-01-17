@@ -12,10 +12,12 @@ interface IProps extends React.HTMLProps<HTMLDivElement> {
     (value: number) => void;
 }
 
+const handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
+
 const SideOption = (props: IProps) => {
   const { side, sideName, handleInput } = props;
   return (
-    <div style={props.style} className="side-options-container">
+    <div onClick={handlePropagation} style={props.style} className="side-options-container">
       <div className="side-options-container-item">
         <UncontrolledTooltip target={`${sideName}-width`}>Ширина</UncontrolledTooltip>
         <NumberInput
