@@ -38,10 +38,10 @@
   justify-content: center;
   align-items: center;
   margin: 15px;
-  height: 100px;
-  width: 100px;
+  height: 85px;
+  width: 85px;
   background-color: gray;
-  border: 5px solid gray;
+  border: 2px solid gray;
 
   cursor: pointer;
 }
