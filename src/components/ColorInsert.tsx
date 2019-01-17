@@ -2,11 +2,11 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'reactstrap';
-import * as uuid from 'uuid/v4';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
+import '../styles/Window.css';
 
 import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, TextureType, WindowType } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
@@ -20,8 +20,8 @@ import * as sectorEnteties from '../redux/currentSector';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
-import { getSectorSizeInMM, isEmptyTexture } from '../helpers';
-import { getOffsetInWindowAxes, getWindowSize } from '../helpers/coordinateСonverter';
+import { isEmptyTexture } from '../helpers';
+import ColorInsertToJson from '../helpers/ColorInsertToJson';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
 import TexturePanel from './TexturePanel';
@@ -127,48 +127,9 @@ class ColorInsert extends React.Component<IProps, IState> {
   public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
 
   public saveColorInsertToJSON = () => {
-    const id = uuid();
     const { side, textureList } = this.props;
-    const { colorInsertName, sectorList, textureType } = this.state;
-
-    const sectorsId = Object.keys(sectorList);
-
-    if (colorInsertName.length === 0) return;
-
-    const sectors = document.getElementsByClassName('preview-container-item');
-    const sectorsParams = sectorsId.reduce((acc, sectorId) => {
-      const newItem = { [sectorId]: {
-        width: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientWidth, textureType),
-        height: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientHeight, textureType),
-        root: textureList[sectorId] ? textureList[sectorId].root : 'sector',
-      },
-      };
-      return { ...acc, ...newItem };
-    },                                     {});
-
-    const sectorParams = sectorsId.map((sectorId) => {
-      const texture = textureList[sectorId];
-      if (texture) {
-        if (textureList[sectorId].root === 'window') {
-          const windowParams = getWindowSize(this.state.windowType, this.state.textureType);
-          const offset = getOffsetInWindowAxes(texture, side, windowParams);
-          return { sector: sectorId, ...texture, ...offset, ...sectorsParams[sectorId] };
-        }
-        return { sector: sectorId, ...texture, ...sectorsParams[sectorId] };
-      }
-      const emptyTexture = {
-        url: '',
-        fileName: '',
-        HOffset: 0,
-        VOffset: 0,
-        width: 0,
-        height: 0,
-      };
-      return { sector: sectorId, ...emptyTexture, ...sectorsParams[sectorId] };
-    });
-
-    const result = { id, name: colorInsertName, ...side, sectors: sectorParams };
-    console.log(JSON.stringify(result));
+    const { colorInsertName, sectorList, textureType, windowType } = this.state;
+    ColorInsertToJson(side, textureList, colorInsertName, sectorList, textureType, windowType);
   }
 
   public ResetFocus = (event: React.FormEvent<HTMLDivElement>) => {

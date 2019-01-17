@@ -6,7 +6,15 @@ import { INumObjType, ISize } from '../interface';
 interface InjectedProps extends ISize {
   step: number;
   margin: INumObjType;
+  arrowVisible: boolean;
 }
+
+const getArrow = () => (
+  <>
+    <div className="topArrow" />
+    <div className="rightArrow" />
+  </>
+);
 
 const Window = (props: InjectedProps & React.HTMLProps<HTMLDivElement>) => {
   const { step, className, margin, width, height } = props;
@@ -16,7 +24,9 @@ const Window = (props: InjectedProps & React.HTMLProps<HTMLDivElement>) => {
     ...buildSizeStyleObj(margin, step),
   };
   return (
-    <div style={syleObj} className={className} />
+    <div style={syleObj} className={className}>
+      {props.arrowVisible ? getArrow() : null}
+    </div>
   );
 };
 

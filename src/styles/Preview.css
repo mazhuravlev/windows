@@ -14,16 +14,6 @@
   margin-bottom: 0;  
 }
 
-.preview-container .window1 {
-  grid-area: window1;
-  background-color: darkgray;
-}
-
-.preview-container .window2 {
-  grid-area: window2;
-  background-color: darkgray;
-}
-
 .preview-container .preview-container-item {
   background-color: darkslategray;
   position: relative;
@@ -125,7 +115,7 @@
 
   position: absolute;
   left: 20px;
-  bottom: 0;
+  bottom: 2px;
 
   width: 0;
   height: 0;
@@ -147,7 +137,7 @@
   content: '';
 
   position: absolute;
-  left: -10px;
+  left: -8px;
   bottom: 20px;
 
   width: 0;

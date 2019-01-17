@@ -5,7 +5,7 @@ export interface IParams {
   padding: number;
 }
 
-type rootType = 'sector' | 'window';
+export type RootType = 'sector' | 'window';
 export interface ISector extends IParams {
   id: number;
 }
@@ -27,7 +27,7 @@ export type IPartOfTexture = Partial<ITexture>;
 
 export interface ISectorTexture extends ITexture {
   sectorId: number;
-  root: rootType;
+  root: RootType;
 }
 
 export interface ITextureList {

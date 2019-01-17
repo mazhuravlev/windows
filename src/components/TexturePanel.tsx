@@ -46,16 +46,16 @@ class Texture extends React.Component<IProps, IState> {
     const { texture } = this.props;
     switch (key) {
       case 'down':
-        this.handleOffsetInput('VOffset')(texture.VOffset as number - 1);
+        this.handleOffsetInput('VOffset')(texture.VOffset - 1);
         break;
       case 'up':
-        this.handleOffsetInput('VOffset')(texture.VOffset as number + 1);
+        this.handleOffsetInput('VOffset')(texture.VOffset + 1);
         break;
       case 'right':
-        this.handleOffsetInput('HOffset')(texture.HOffset as number + 1);
+        this.handleOffsetInput('HOffset')(texture.HOffset + 1);
         break;
       case 'left':
-        this.handleOffsetInput('HOffset')(texture.HOffset as number - 1);
+        this.handleOffsetInput('HOffset')(texture.HOffset - 1);
         break;
       default:
         return;
@@ -66,7 +66,7 @@ class Texture extends React.Component<IProps, IState> {
     const { textureList, currentSector } = this.props;
     const texture = {
       ...this.props.texture,
-      [offsetType]: value,
+      [offsetType]: Math.abs(value) > 20 ? 0 : value,
     };
 
     const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
@@ -211,7 +211,7 @@ class Texture extends React.Component<IProps, IState> {
             <NumberInput
               id="horizontal-shift"
               style={{ position: 'relative', marginLeft: '15px' }}
-              value={this.props.texture.HOffset as number}
+              value={this.props.texture.HOffset}
               min={-10}
               max={10}
               onChange={this.handleOffsetInput('HOffset')}
@@ -220,7 +220,7 @@ class Texture extends React.Component<IProps, IState> {
             <NumberInput
               id="vertical-shift"
               style={{ position: 'relative' }}
-              value={this.props.texture.VOffset as number}
+              value={this.props.texture.VOffset}
               min={-10}
               max={10}
               onChange={this.handleOffsetInput('VOffset')}

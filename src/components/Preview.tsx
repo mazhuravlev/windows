@@ -56,10 +56,15 @@ const getPreviewPosition = (side: ISideSize, step: number) => {
   return { top, left };
 };
 
-const getArrow = (selectedSector: number, sectorId: number, textureList: ITextureList, rootType: string): string => {
+const getArrowForSector = (selectedSector: number, sectorId: number, textureList: ITextureList): string => {
   if (selectedSector !== sectorId) return '';
   if (!textureList[selectedSector]) return 'arrow';
-  return textureList[selectedSector].root === rootType ? 'arrow' : '';
+  return textureList[selectedSector].root === 'sector' ? 'arrow' : '';
+};
+
+const getArrowForWindow = (selectedSector: number, textureList: ITextureList): boolean => {
+  if (!textureList[selectedSector]) return false;
+  return textureList[selectedSector].root === 'window';
 };
 
 interface IProps {
@@ -115,7 +120,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               className={
                 `preview-container-item
                 sector${sectorNumber}
-                ${getArrow(props.currentSector, sectorNumber, props.textureList, 'sector')}`}
+                ${getArrowForSector(props.currentSector, sectorNumber, props.textureList)}`}
               sectorSize={size}
               currentSector={props.currentSector}
               textureList={props.textureList}
@@ -136,8 +141,16 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
         margin={marginWindow1}
         {...sizeWindow1}
         step={step}
-        className={'window1'} />
-      <Window margin={marginWindow2}{...sizeWindow2} step={step} className="window2" />
+        className="window1"
+        arrowVisible={getArrowForWindow(props.currentSector, props.textureList)}
+      />
+      <Window
+        margin={marginWindow2}
+        {...sizeWindow2}
+        step={step}
+        className="window2"
+        arrowVisible={false}
+      />
     </div>
   );
 };
