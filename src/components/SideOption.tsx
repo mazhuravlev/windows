@@ -36,7 +36,7 @@ const SideOption = (props: IProps) => {
           style={{ position: 'relative' }}
           value={side[`${sideName}Margin`]}
           min={0}
-          max={5}
+          max={props.max - 1}
           onChange={handleInput(`${sideName}Margin`)}
         />
       </div>
