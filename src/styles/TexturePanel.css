@@ -57,12 +57,13 @@
   width: 85px;
   background-color: gray;
   border: 2px solid gray;
-
+  
   cursor: pointer;
 }
 
 .texture-panel-container .imgPreview img {
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -98,7 +99,7 @@
 
 .texture-panel-container .preview-list .preview-history {
   position: fixed;
-  width: 273px;
+  width: 278px;
   height: 60px;
   background-color: white;
   display: flex;
