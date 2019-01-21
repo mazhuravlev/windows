@@ -3,11 +3,12 @@ import Sector from './Sector';
 import Window from './Window';
 
 import { getGridItemSize, getSectorSize } from '../helpers';
-import { ISectorList, ISideSize, ITextureList, IWindowSize } from '../interface';
+import { getOffsetInWindowAxes, getWindowSize } from '../helpers/coordinateСonverter';
+import { ISectorList, ISectorTexture, ISideSize, ITextureList, IWindowParams, TextureType, WindowType } from '../interface';
 import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, PREVIEW_MAX_SECTOR_SIZE as PREVIEW_MAX_MARGIN, TILE, TILE_SIZE, WINDOW } from '../static';
 
-const shiftGridPosition = (sector: number, paddind: number): number => {
-  if (paddind === 0) {
+const shiftGridPosition = (sector: number, windowType: WindowType): number => {
+  if (windowType === WINDOW) {
     switch (sector) {
       case 5: return 3;
       case 8: return 7;
@@ -24,21 +25,6 @@ const getStepSize = (textureType: string): number => {
     case TILE: return TILE_SIZE;
     default: return 0;
   }
-};
-
-const getWindowSize = (textureType: string, windowType: string): IWindowSize => {
-  // for double width = 32- padding - sector7Width
-  if (textureType === BRICK && windowType === WINDOW) {
-    return { width: 32, height: 24, padding: 0 };
-  }
-  if (textureType === BRICK && windowType === DOUBLE_WINDOW) {
-    return { width: 28, height: 24, padding: 8 };
-  }
-  if (textureType === TILE && windowType === WINDOW) {
-    return { width: 24, height: 18, padding: 0 };
-  }
-  // DOUBLE_WINDOW and TILE (default)
-  return { width: 21, height: 18, padding: 6 };
 };
 
 const getSector7Width = (textureType: string): number => {
@@ -67,10 +53,20 @@ const getArrowForWindow = (selectedSector: number, textureList: ITextureList): b
   return textureList[selectedSector].root === 'window';
 };
 
+const getTextureOffset = (sectorId: number, textureList: ITextureList, side: ISideSize, window: IWindowParams): Partial<ISectorTexture> => {
+  if (textureList[sectorId]) {
+    const texture = textureList[sectorId];
+    return texture.root === 'window' ?
+      getOffsetInWindowAxes(texture, side, window)
+      : { VOffset: texture.VOffset, HOffset: texture.HOffset };
+  }
+  return { HOffset: 0, VOffset: 0 };
+};
+
 interface IProps {
   sectorList: ISectorList;
-  textureType: string;
-  windowType: string;
+  textureType: TextureType;
+  windowType: WindowType;
   side: ISideSize;
   textureList: ITextureList;
   currentSector: number;
@@ -81,36 +77,30 @@ interface IProps {
 const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
   const { sectorList, className, side, handleClick, textureType, windowType } = props;
   const step = getStepSize(textureType);
-  const window = getWindowSize(textureType, windowType);
-  const sizeWindow1 = {
-    width: window.width - window.padding,
-    height: window.height,
-  };
-  const sizeWindow2 = {
-    width: window.padding,
-    height: window.height,
-  };
+  const window = getWindowSize(windowType, textureType);
+
   const marginWindow1 = {
     marginTop: side.topMargin,
-    marginRight: window.padding === 0 ? side.rightMargin : 0,
+    marginRight: windowType === WINDOW ? side.rightMargin : 0,
     marginBottom: side.bottomMargin,
     marginLeft: side.leftMargin,
   };
   const marginWindow2 = {
     marginTop: side.topMargin,
-    marginRight: window.padding === 0 ? 0 : side.rightMargin,
+    marginRight: windowType === DOUBLE_WINDOW ? side.rightMargin : 0,
     marginLeft: side.middleMargin,
     marginBottom: side.bottomMargin,
   };
   const sector7Width = getSector7Width(textureType);
   const previewPosition = getPreviewPosition(side, step);
   return (
-    <div style={{ ...previewPosition }} className={className}>
+    <div id="colorPrewiew" style={{ ...previewPosition }} className={className}>
       {
-        Object.keys(sectorList).map((key) => {
-          const sector = sectorList[key];
-          const sectorNumber = Number(key);
-          const size = getSectorSize(side, sectorNumber, window.padding, sector7Width);
+        Object.keys(sectorList).map((sectorId) => {
+          const sector = sectorList[sectorId];
+          const sectorNumber = Number(sectorId);
+          const size = getSectorSize(side, sectorNumber, windowType, sector7Width);
+          const textureOffset = getTextureOffset(sectorNumber, props.textureList, side, window);
           return (
             <Sector
               key={sector.id}
@@ -125,7 +115,8 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
               currentSector={props.currentSector}
               textureList={props.textureList}
               onClick={handleClick(sector.id)}
-              gridArea={shiftGridPosition(sectorNumber, window.padding)}
+              gridArea={shiftGridPosition(sectorNumber, windowType)}
+              textureOffset={textureOffset}
             >
               <div
                 className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`} `}
@@ -139,14 +130,15 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
       }
       <Window
         margin={marginWindow1}
-        {...sizeWindow1}
+        {...{ width: window.width1, height: window.height }}
         step={step}
         className="window1"
         arrowVisible={getArrowForWindow(props.currentSector, props.textureList)}
       />
       <Window
         margin={marginWindow2}
-        {...sizeWindow2}
+        // {...sizeWindow2}
+        {...{ width: window.width2, height: window.height }}
         step={step}
         className="window2"
         arrowVisible={false}

@@ -1,4 +1,4 @@
-import { INumObjType, ISideSize, ISize, ITexture, TextureType } from '../interface';
+import { INumObjType, ISideSize, ISize, ITexture, TextureType, WindowType } from '../interface';
 import { BRICK, BRICK_SIZE, TILE_SIZE, WINDOW } from '../static';
 
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
@@ -7,7 +7,7 @@ export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
   ),                                 {});
 };
 
-export const getSectorSize = (side: ISideSize, sector: number, padding: number, sector7Width: number): INumObjType => {
+export const getSectorSize = (side: ISideSize, sector: number, windowType: WindowType, sector7Width: number): INumObjType => {
   switch (sector) {
     case 1: {
       return { width: side.leftWidth };
@@ -16,11 +16,11 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
       return { height: side.topWidth };
     }
     case 3: {
-      const height = padding === 0 ? 0 : side.topWidth;
+      const height = windowType === WINDOW ? 0 : side.topWidth;
       return { height };
     }
     case 4: {
-      const height = padding === 0 ? 0 : side.topWidth;
+      const height = windowType === WINDOW ? 0 : side.topWidth;
       return { height };
     }
     case 5: {
@@ -30,7 +30,7 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
       return { width: side.leftWidth };
     }
     case 7: {
-      const width = padding === 0 ? 0 : sector7Width;
+      const width = windowType === WINDOW ? 0 : sector7Width;
       return { width };
     }
     case 8: {
@@ -43,11 +43,11 @@ export const getSectorSize = (side: ISideSize, sector: number, padding: number, 
       return { height: side.bottomWidth };
     }
     case 11: {
-      const height = padding === 0 ? 0 : side.bottomWidth;
+      const height = windowType === WINDOW ? 0 : side.bottomWidth;
       return { height };
     }
     case 12: {
-      const height = padding === 0 ? 0 : side.bottomWidth;
+      const height = windowType === WINDOW ? 0 : side.bottomWidth;
       return { height };
     }
     case 13: {

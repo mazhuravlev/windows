@@ -1,8 +1,8 @@
 import * as uuid from 'uuid/v4';
 
-import { getSectorSizeInMM } from '../helpers';
-import { getOffsetInWindowAxes, getWindowSize } from '../helpers/coordinateСonverter';
+import { getSectorSizeInMM } from '.';
 import { ISectorList, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
+import { getOffsetInWindowAxes, getWindowSize } from './coordinateСonverter';
 
 interface ISectorParams extends ITexture {
   sectorName: string;

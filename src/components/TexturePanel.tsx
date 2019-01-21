@@ -42,7 +42,7 @@ class Texture extends React.Component<IProps, IState> {
     previewListShow: false,
   };
 
-  public handleKey = (key: string) => {
+  public handleKey = (key: string): void => {
     const { texture } = this.props;
     switch (key) {
       case 'down':
@@ -64,16 +64,17 @@ class Texture extends React.Component<IProps, IState> {
 
   public handleOffsetInput = (offsetType: string) => (value: number) => {
     const { textureList, currentSector } = this.props;
+    if (currentSector === 0 || !textureList[currentSector]) return;
+
     const texture = {
       ...this.props.texture,
       [offsetType]: Math.abs(value) > 20 ? 0 : value,
     };
 
-    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
     const textureItem: ISectorTexture = {
       ...texture,
       sectorId: this.props.currentSector,
-      root: rootType,
+      root: textureList[currentSector].root,
     };
     this.props.addTextureItem(textureItem);
     this.props.setTexture(texture);

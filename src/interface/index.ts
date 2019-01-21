@@ -67,3 +67,10 @@ export interface IStyleObj {
 export type WindowType = typeof WINDOW | typeof DOUBLE_WINDOW;
 
 export type TextureType = typeof BRICK | typeof TILE;
+
+export interface IWindowParams {
+  width1: number;
+  width2: number;
+  height: number;
+  spaceBetween: number;
+}

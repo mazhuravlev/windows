@@ -1,14 +1,14 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button, Input } from 'reactstrap';
+import { Button, ButtonGroup, Input } from 'reactstrap';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/Window.css';
 
-import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, TextureType, WindowType } from '../interface';
+import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -22,7 +22,7 @@ import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
 import { isEmptyTexture } from '../helpers';
-import ColorInsertToJson from '../helpers/ColorInsertToJson';
+import colorInsertToJson from '../helpers/colorInsertToJson';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
 import TexturePanel from './TexturePanel';
@@ -63,17 +63,17 @@ class ColorInsert extends React.Component<IProps, IState> {
     this.setState({ gridHide: !this.state.gridHide });
   }
 
-  public textureTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
+  public textureTypeToggle = (value: TextureType) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     this.props.setSideSize(sideEnteties.initState);
     this.setState({
-      textureType: value as TextureType,
+      textureType: value,
     });
   }
 
-  public rootTypeToggle = (event: React.FormEvent<HTMLInputElement>) => {
+  public rootTypeToggle = (value: RootType) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     if (this.props.currentSector === 0) return;
-    const { value } = event.currentTarget;
     const { textureList } = this.props;
 
     if (!textureList[this.props.currentSector]) return;
@@ -132,7 +132,7 @@ class ColorInsert extends React.Component<IProps, IState> {
   public saveColorInsertToJSON = () => {
     const { side, textureList } = this.props;
     const { colorInsertName, sectorList, textureType, windowType } = this.state;
-    ColorInsertToJson(side, textureList, colorInsertName, sectorList, textureType, windowType);
+    colorInsertToJson(side, textureList, colorInsertName, sectorList, textureType, windowType);
   }
 
   public ResetFocus = (event: React.FormEvent<HTMLDivElement>) => {
@@ -190,15 +190,21 @@ class ColorInsert extends React.Component<IProps, IState> {
       <div className="app-container" onClick={this.ResetFocus}>
         <div className="container-item options">
           {this.renderSavePanel()}
-          <div className="type-toggle">
-              <p>Тип текстуры:</p>
-              <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={BRICK} checked={textureType === BRICK}/> Кирпич</p>
-              <p><input onChange={this.textureTypeToggle} type="radio" name="textureType" value={TILE} checked={textureType === TILE}/> Плитка</p>
-          </div>
-          <div onClick={this.handlePropagation} className="type-toggle">
-              <p>Параметры привязки:</p>
-              <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'sector'} checked={rootType === 'sector'}/> Сектор</p>
-              <p><input onChange={this.rootTypeToggle} type="radio" name="rootType" value={'window'} checked={rootType === 'window'}/> Окно</p>
+          <div className="control-button-panel">
+            <div className="type-toggle">
+                <p>Тип текстуры:</p>
+                <ButtonGroup>
+                  <Button onClick={this.textureTypeToggle(BRICK)} active={textureType === BRICK}>Кирпич</Button>
+                  <Button onClick={this.textureTypeToggle(TILE)} active={textureType === TILE}>Плитка</Button>
+                </ButtonGroup>
+            </div>
+            <div onClick={this.handlePropagation} className="type-toggle">
+                <p>Параметры привязки:</p>
+                <ButtonGroup>
+                  <Button onClick={this.rootTypeToggle('sector')} active={rootType === 'sector'}>Сектор</Button>
+                  <Button onClick={this.rootTypeToggle('window')} active={rootType === 'window'}>Окно</Button>
+                </ButtonGroup>
+            </div>
           </div>
           <TexturePanel />
         </div>

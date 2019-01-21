@@ -12,6 +12,16 @@ p, img {
   border: 2px solid gray;
 }
 
+.app-container .control-button-panel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.app-container .control-button-panel {
+  display: flex;
+  justify-content: space-between;
+}
+
 .app-container .container-item {
   width: 720px;
   margin: 0 auto;
@@ -30,7 +40,10 @@ p, img {
 
 .app-container .type-toggle p {
   margin: 0;
+  margin-right: 10px;
   padding: 0;
+
+  line-height: 38px;
 }
 
 .app-container .type-toggle input {

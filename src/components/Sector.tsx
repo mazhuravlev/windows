@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { buildSizeStyleObj } from '../helpers';
-import { INumObjType, ISector, IStyleObj, ITexture, ITextureList } from '../interface';
+// import { getOffsetInWindowAxes } from '../helpers/coordinateСonverter';
+import { INumObjType, ISector, ISectorTexture, IStyleObj, ITexture, ITextureList } from '../interface';
 import { BRICK, BRICK_SIZE, TILE_SIZE } from '../static';
 
 interface IProps {
@@ -12,6 +13,7 @@ interface IProps {
   textureList: ITextureList;
   textureType: string;
   currentSector: number;
+  textureOffset: Partial<ISectorTexture>;
 }
 
 const getTextureSize = (textureType: string, texture: ITexture, ratio: number): string => {
@@ -32,12 +34,12 @@ const Sector = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
 
   if (textureList[sector.id]) {
     const texture = textureList[sector.id];
-    const { url, VOffset, HOffset } = texture;
+    const { url } = texture;
     styleObj = {
       ...styleObj,
       backgroundImage: `url(${url})`,
       backgroundSize: getTextureSize(props.textureType, texture, TILE_SIZE / BRICK_SIZE),
-      backgroundPosition: `left ${HOffset * step}px bottom ${VOffset * step}px`,
+      backgroundPosition: `left ${props.textureOffset.HOffset as number * step}px bottom ${props.textureOffset.VOffset as number * step}px`,
     };
   }
   return (
