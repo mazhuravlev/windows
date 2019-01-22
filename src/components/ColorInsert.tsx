@@ -21,7 +21,7 @@ import * as sideEnteties from '../redux/side';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 
-import { isEmptyTexture } from '../helpers';
+import { checkOverSize, isEmptyTexture } from '../helpers';
 import colorInsertToJson from '../helpers/colorInsertToJson';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
@@ -65,7 +65,11 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public textureTypeToggle = (value: TextureType) => (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    this.props.setSideSize(sideEnteties.initState);
+    // this.props.setSideSize(sideEnteties.initState);
+    if (checkOverSize(this.props.side, value)) {
+      alert('Недопустимый размер сектора!');
+      return;
+    }
     this.setState({
       textureType: value,
     });

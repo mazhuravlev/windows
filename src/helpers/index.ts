@@ -146,3 +146,13 @@ export const getSectorSizeInMM = (sizeInPx: number, textureType: TextureType): n
   const itemCount = sizeInPx / (textureType === BRICK ? BRICK_SIZE : TILE_SIZE);
   return itemCount * (textureType === BRICK ? 75 : 100);
 };
+
+export const checkOverSize = (side: ISideSize, textureType: TextureType): boolean => {
+  const maxSize = textureType === BRICK ? 8 : 6;
+  return [
+    side.leftMargin + side.leftWidth > maxSize,
+    side.topMargin + side.topWidth > maxSize,
+    side.rightMargin + side.rightWidth > maxSize,
+    side.bottomMargin + side.bottomWidth > maxSize,
+  ].some(item => item);
+};
