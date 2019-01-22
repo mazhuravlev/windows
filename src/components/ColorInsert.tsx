@@ -67,7 +67,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     event.stopPropagation();
     // this.props.setSideSize(sideEnteties.initState);
     if (checkOverSize(this.props.side, value)) {
-      alert('Недопустимый размер сектора!');
+      alert(`Недопустимый размер сектора! Максимально допустимый размер "${value === BRICK ? 8 : 6}"`);
       return;
     }
     this.setState({
