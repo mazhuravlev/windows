@@ -74,3 +74,12 @@ export interface IWindowParams {
   height: number;
   spaceBetween: number;
 }
+
+export interface IMetaData {
+  side: ISideSize;
+  textureList: ITextureList;
+  name: string;
+  sectorList: ISectorList;
+  textureType: TextureType;
+  windowType: WindowType;
+}

@@ -1,5 +1,7 @@
+import { Base64 } from 'js-base64';
 import * as _ from 'lodash';
 import * as React from 'react';
+
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, Input } from 'reactstrap';
 
@@ -8,7 +10,7 @@ import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/Window.css';
 
-import { IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
+import { IMetaData, IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -44,6 +46,7 @@ interface IProps {
   setCurrentSector: (sectorId: number) => void;
   setTexture: (texture: IPartOfTexture) => void;
   addTextureItem: (sectorTexture: ISectorTexture) => void;
+  updateTextureList: (textureList: ITextureList) => void;
   removeTextureItem: (sectorId: { sectorId: string }) => void;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
 }
@@ -139,6 +142,21 @@ class ColorInsert extends React.Component<IProps, IState> {
     colorInsertToJson(side, textureList, colorInsertName, sectorList, textureType, windowType);
   }
 
+  public loadColorInsertFromJSON = () => {
+    const json = prompt('Введите json') as string;
+    const obj = JSON.parse(json);
+    const { metaData } = obj;
+    const downloadState = JSON.parse(Base64.decode(metaData)) as IMetaData;
+    this.props.setSideSize(downloadState.side);
+    this.props.updateTextureList(downloadState.textureList);
+    this.setState({
+      sectorList: downloadState.sectorList,
+      textureType: downloadState.textureType,
+      windowType: downloadState.windowType,
+      colorInsertName: downloadState.name,
+    });
+  }
+
   public ResetFocus = (event: React.FormEvent<HTMLDivElement>) => {
     event.stopPropagation();
     this.props.setCurrentSector(0);
@@ -223,7 +241,10 @@ class ColorInsert extends React.Component<IProps, IState> {
           />
           {this.renderTools()}
         </SizeOptionsPanel>
-        <Button onClick={this.saveColorInsertToJSON} block={true} color="primary">Save</Button>
+        <ButtonGroup className="footer-button">
+          <Button onClick={this.saveColorInsertToJSON} color="primary">Сохранить</Button>
+          <Button onClick={this.loadColorInsertFromJSON} color="primary">Загрузить</Button>
+        </ButtonGroup>
       </div>
     );
   }
@@ -240,6 +261,7 @@ const mapDispatchToProps = {
   setCurrentSector: sectorEnteties.setCurrentSector,
   setTexture: textureEnteties.setTexture,
   addTextureItem: textureListEnteties.addTextureItem,
+  updateTextureList: textureListEnteties.updateTextureList,
   removeTextureItem: textureListEnteties.removeTextureItem,
   setSideSize: sideEnteties.setSideSize,
 };

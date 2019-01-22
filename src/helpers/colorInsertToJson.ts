@@ -1,3 +1,4 @@
+import { Base64 } from 'js-base64';
 import * as uuid from 'uuid/v4';
 
 import { getSectorSizeInMM } from '.';
@@ -14,6 +15,8 @@ interface ISectorParams extends ITexture {
 export default (side: ISideSize, textureList: ITextureList, name: string, sectorList: ISectorList, textureType: TextureType, windowType: WindowType) => {
   const id = uuid();
   const sectorsId = Object.keys(sectorList);
+
+  const metaData = Base64.encode(JSON.stringify({ side, textureList, name, sectorList, textureType, windowType }));
 
   if (name.length === 0) return alert('Введите имя!');
 
@@ -53,9 +56,8 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
   const jsonSide = prepareSideView(side);
   const jsonSectors = sectorParams.map(sector => prepareSectorApiView(sector))
     .sort((a, b) => Number(a.Sector) > Number(b.Sector) ? 1 : -1);
-  console.log(jsonSectors);
 
-  const result = { ID: id, Name: name, ...jsonSide, Sectors: jsonSectors };
+  const result = { ID: id, Name: name, ...jsonSide, metaData, Sectors: jsonSectors };
   console.log(JSON.stringify(result));
 };
 

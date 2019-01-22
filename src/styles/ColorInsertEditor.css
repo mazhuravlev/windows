@@ -122,3 +122,16 @@ p, img {
 .app-container .save-panel input {
   max-width: 300px;
 }
+
+/* footer styles */
+
+.footer-button {
+  width: 720px;
+  margin-left: 63px;
+  margin-top: 15px;
+}
+
+.footer-button .btn{
+  width: 360px;
+  margin: 2px;
+}

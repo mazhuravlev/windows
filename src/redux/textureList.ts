@@ -14,6 +14,9 @@ export type ITextureListState = ITextureList;
 const ADD = 'ADD_TEXTURE_ITEM';
 type ADD = typeof ADD;
 
+const UPDATE = 'UPDATE_TEXTURE_ITEM';
+type UPDATE = typeof UPDATE;
+
 const REMOVE = 'REMOVE_TEXTURE_ITEM';
 type REMOVE = typeof REMOVE;
 
@@ -25,12 +28,17 @@ export interface IAddTextureItem {
   payload: ISectorTexture;
 }
 
+export interface IUpdateTextureState {
+  type: UPDATE;
+  payload: ITextureList;
+}
+
 export interface IRemoveTextureItem {
   type: REMOVE;
   payload: { sectorId: string };
 }
 
-export type TextureListAction = IAddTextureItem | IRemoveTextureItem;
+export type TextureListAction = IAddTextureItem | IUpdateTextureState | IRemoveTextureItem;
 
 /*
     REDUCER
@@ -41,6 +49,10 @@ export default function reducer(state: ITextureListState = {},
     case ADD: {
       const sectorTexture = action.payload;
       return { ...state, [sectorTexture.sectorId]: sectorTexture };
+    }
+    case UPDATE: {
+      const textureList = action.payload;
+      return { ...textureList };
     }
     case REMOVE: {
       return _.omit(state, action.payload.sectorId);
@@ -56,6 +68,11 @@ export default function reducer(state: ITextureListState = {},
 export const addTextureItem = (payload: ISectorTexture): IAddTextureItem => ({
   payload,
   type: ADD,
+});
+
+export const updateTextureList = (payload: ITextureList): IUpdateTextureState => ({
+  payload,
+  type: UPDATE,
 });
 
 export const removeTextureItem = (payload: { sectorId: string }): IRemoveTextureItem => ({
