@@ -12,19 +12,9 @@ p, img {
   border: 2px solid gray;
 }
 
-.app-container .control-button-panel {
-  display: flex;
-  justify-content: space-between;
-}
-
-.app-container .control-button-panel {
-  display: flex;
-  justify-content: space-between;
-}
-
 .app-container .container-item {
-  width: 720px;
-  margin: 0 auto;
+  width: 520px;
+  margin-left: 60px;
 }
 /* Window Size */
 
@@ -36,6 +26,7 @@ p, img {
 .app-container .type-toggle {
   display: flex;
   justify-content: flex-start;
+  margin-left: 43px;
 }
 
 .app-container .type-toggle p {
@@ -46,12 +37,15 @@ p, img {
   line-height: 38px;
 }
 
-.app-container .type-toggle input {
-  margin-left: 50px;
+.app-container .type-toggle .texture-type-toggle {
+  margin-left: 123px;
+}
+
+.app-container .type-toggle .root-type-toggle {
+  margin-left: 67px;
 }
 
 .container-control-buttons {
-  /* position: absolute; */
   margin-left: -190px;
   margin-bottom: 3px;
   display: flex;
@@ -126,5 +120,5 @@ p, img {
 }
 
 .app-container .save-panel input {
-  max-width: 400px;
+  max-width: 300px;
 }

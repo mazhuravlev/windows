@@ -6,12 +6,16 @@
   align-items: center;
 }
 
-.texture-panel-container .texture-panel-container-item {
+/* .texture-panel-container .texture-panel-container-item {
   margin-right: 5px;
-}
+} */
 
 .texture-panel-container .texture-name {
   width: 250px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -47,14 +51,17 @@
 }
 
 .texture-panel-container .imgPreview {
-  position: relative;
+  position: absolute;
+  left: 530px;
+  bottom: -48px;
+
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 15px;
-  height: 85px;
-  width: 85px;
+  height: 180px;
+  width: 180px;
   background-color: gray;
   border: 2px solid gray;
   
@@ -75,8 +82,8 @@
 
 .texture-panel-container .preview-list {
   position: absolute;
-  left: -5%;
-  top: 110%;
+  left: -70%;
+  top: 102%;
   z-index: 10;
 
   width: 300px;

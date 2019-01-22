@@ -192,21 +192,21 @@ class ColorInsert extends React.Component<IProps, IState> {
           {this.renderSavePanel()}
           <div className="control-button-panel">
             <div className="type-toggle">
-                <p>Тип текстуры:</p>
-                <ButtonGroup>
-                  <Button onClick={this.textureTypeToggle(BRICK)} active={textureType === BRICK}>Кирпич</Button>
-                  <Button onClick={this.textureTypeToggle(TILE)} active={textureType === TILE}>Плитка</Button>
-                </ButtonGroup>
-            </div>
-            <div onClick={this.handlePropagation} className="type-toggle">
-                <p>Параметры привязки:</p>
-                <ButtonGroup>
-                  <Button onClick={this.rootTypeToggle('sector')} active={rootType === 'sector'}>Сектор</Button>
-                  <Button onClick={this.rootTypeToggle('window')} active={rootType === 'window'}>Окно</Button>
-                </ButtonGroup>
+              <p>Тип текстуры:</p>
+              <ButtonGroup className="texture-type-toggle">
+                <Button onClick={this.textureTypeToggle(BRICK)} active={textureType === BRICK}>Кирпич</Button>
+                <Button onClick={this.textureTypeToggle(TILE)} active={textureType === TILE}>Плитка</Button>
+              </ButtonGroup>
             </div>
           </div>
           <TexturePanel />
+          <div onClick={this.handlePropagation} className="type-toggle">
+            <p>Параметры привязки:</p>
+            <ButtonGroup className="root-type-toggle">
+              <Button onClick={this.rootTypeToggle('sector')} active={rootType === 'sector'}>Сектор</Button>
+              <Button onClick={this.rootTypeToggle('window')} active={rootType === 'window'}>&#160;Окно&#160;</Button>
+            </ButtonGroup>
+          </div>
         </div>
         <SizeOptionsPanel {...this.state}>
           <Preview
