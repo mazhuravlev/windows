@@ -8,11 +8,17 @@ import ColorInsert from './components/ColorInsert';
 
 import registerServiceWorker from './registerServiceWorker';
 
+if (window.CefSharp) {
+  (async () => {
+    await window.CefSharp.BindObjectAsync('vasya');
+  })();
+}
+
 const store = configureStore();
 
 const App = () => (
   <Provider store={store}>
-    <ColorInsert />
+    <ColorInsert isWindow={window.CefSharp}/>
   </Provider>
 );
 

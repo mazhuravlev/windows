@@ -1,7 +1,7 @@
+import classnames from 'classnames';
 import { Base64 } from 'js-base64';
 import * as _ from 'lodash';
 import * as React from 'react';
-
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, Input } from 'reactstrap';
 
@@ -10,7 +10,18 @@ import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/Window.css';
 
-import { IMetaData, IPartOfTexture, ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
+import {
+  IMetaData,
+  IPartOfTexture,
+  ISectorList,
+  ISectorTexture,
+  ISideSize,
+  ITexture,
+  ITextureList,
+  RootType,
+  TextureType,
+  WindowType,
+} from '../interface';
 import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
@@ -49,6 +60,7 @@ interface IProps {
   updateTextureList: (textureList: ITextureList) => void;
   removeTextureItem: (sectorId: { sectorId: string }) => void;
   setSideSize: (size: sideEnteties.ISideSetType) => void;
+  isWindow: boolean;
 }
 
 class ColorInsert extends React.Component<IProps, IState> {
@@ -66,11 +78,17 @@ class ColorInsert extends React.Component<IProps, IState> {
     this.setState({ gridHide: !this.state.gridHide });
   }
 
-  public textureTypeToggle = (value: TextureType) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  public textureTypeToggle = (value: TextureType) => (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.stopPropagation();
     // this.props.setSideSize(sideEnteties.initState);
     if (checkOverSize(this.props.side, value)) {
-      alert(`Недопустимый размер сектора! Максимально допустимый размер "${value === BRICK ? 8 : 6}"`);
+      alert(
+        `Недопустимый размер сектора! Максимально допустимый размер "${
+          value === BRICK ? 8 : 6
+        }"`,
+      );
       return;
     }
     this.setState({
@@ -78,7 +96,9 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public rootTypeToggle = (value: RootType) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  public rootTypeToggle = (value: RootType) => (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.stopPropagation();
     if (this.props.currentSector === 0) return;
     const { textureList } = this.props;
@@ -99,7 +119,9 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public handlePreviewClick = (sectorNumber: number) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handlePreviewClick = (sectorNumber: number) => (
+    event: React.FormEvent<HTMLDivElement>,
+  ) => {
     event.stopPropagation();
     const { setCurrentSector, textureList } = this.props;
     setCurrentSector(Number(sectorNumber));
@@ -127,23 +149,42 @@ class ColorInsert extends React.Component<IProps, IState> {
   public handleBasketClick = (event: React.FormEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     if (this.props.currentSector === 0) return;
-    this.props.removeTextureItem({ sectorId: String(this.props.currentSector) });
+    this.props.removeTextureItem({
+      sectorId: String(this.props.currentSector),
+    });
     this.props.setTexture({
       VOffset: 0,
       HOffset: 0,
     });
   }
 
-  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
+  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) =>
+    event.stopPropagation()
 
   public saveColorInsertToJSON = () => {
     const { side, textureList } = this.props;
     const { colorInsertName, sectorList, textureType, windowType } = this.state;
-    colorInsertToJson(side, textureList, colorInsertName, sectorList, textureType, windowType);
+    const result = colorInsertToJson(
+      side,
+      textureList,
+      colorInsertName,
+      sectorList,
+      textureType,
+      windowType,
+    );
+    if (!result) return;
+    if (window.vasya) {
+      window.vasya.save(JSON.stringify(result));
+    } else {
+      console.log(result);
+    }
   }
 
   public loadColorInsertFromJSON = () => {
-    const json = prompt('Введите json') as string;
+    const json = this.props.isWindow
+      ? window.vasya.load()
+      : (prompt('Введите json') as string);
+    if (!json) return;
     const obj = JSON.parse(json);
     const { metaData } = obj;
     const downloadState = JSON.parse(Base64.decode(metaData)) as IMetaData;
@@ -170,35 +211,41 @@ class ColorInsert extends React.Component<IProps, IState> {
     return (
       <div className="save-panel">
         <a href="#">
-          <img className="icon" src={saveIconSvg} alt="save"/>
+          <img className="icon" src={saveIconSvg} alt="save" />
         </a>
         <p> Имя цветной вставки </p>
-        <Input onChange={this.handleColorInsertName} type="text" value={this.state.colorInsertName}/>
+        <Input
+          onChange={this.handleColorInsertName}
+          type="text"
+          value={this.state.colorInsertName}
+        />
       </div>
     );
   }
 
   public renderTools() {
     return (
-      <div onClick={this.handlePropagation} className="container-control-buttons" style={{ gridArea: 'tools' }}>
+      <div
+        onClick={this.handlePropagation}
+        className="container-control-buttons"
+        style={{ gridArea: 'tools' }}
+      >
         <a
           href="#"
           onClick={this.handleGridHide}
           className={`icon ${this.state.gridHide ? '' : 'grid-icon-hide'}`}
         >
-          <img src={gridIconSvg} alt=""/>
+          <img src={gridIconSvg} alt="" />
         </a>
         <a
           href="#"
           onClick={this.windowTypeToggle}
-          className={`window-icon ${this.state.windowType === DOUBLE_WINDOW ? '' : 'double-window'}`}
+          className={`window-icon ${
+            this.state.windowType === DOUBLE_WINDOW ? '' : 'double-window'
+          }`}
         />
-        <a
-          href="#"
-          onClick={this.handleBasketClick}
-          className="basket-icon"
-        >
-          <img className="icon" src={basketIconSvg} alt=""/>
+        <a href="#" onClick={this.handleBasketClick} className="basket-icon">
+          <img className="icon" src={basketIconSvg} alt="" />
         </a>
       </div>
     );
@@ -206,18 +253,35 @@ class ColorInsert extends React.Component<IProps, IState> {
 
   public render() {
     const { textureType } = this.state;
-    const { currentSector, textureList } = this.props;
-    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
+    const { currentSector, textureList, isWindow } = this.props;
+    const rootType = textureList[currentSector]
+      ? textureList[currentSector].root
+      : 'sector';
     return (
-      <div className="app-container" onClick={this.ResetFocus}>
+      <div
+        className={classnames('app-container', {
+          'app-container-border': !isWindow,
+        })}
+        onClick={this.ResetFocus}
+      >
         <div className="container-item options">
           {this.renderSavePanel()}
           <div className="control-button-panel">
             <div className="type-toggle">
               <p>Тип текстуры:</p>
               <ButtonGroup className="texture-type-toggle">
-                <Button onClick={this.textureTypeToggle(BRICK)} active={textureType === BRICK}>Кирпич</Button>
-                <Button onClick={this.textureTypeToggle(TILE)} active={textureType === TILE}>Плитка</Button>
+                <Button
+                  onClick={this.textureTypeToggle(BRICK)}
+                  active={textureType === BRICK}
+                >
+                  Кирпич
+                </Button>
+                <Button
+                  onClick={this.textureTypeToggle(TILE)}
+                  active={textureType === TILE}
+                >
+                  Плитка
+                </Button>
               </ButtonGroup>
             </div>
           </div>
@@ -225,8 +289,18 @@ class ColorInsert extends React.Component<IProps, IState> {
           <div onClick={this.handlePropagation} className="type-toggle">
             <p>Параметры привязки:</p>
             <ButtonGroup className="root-type-toggle">
-              <Button onClick={this.rootTypeToggle('sector')} active={rootType === 'sector'}>Сектор</Button>
-              <Button onClick={this.rootTypeToggle('window')} active={rootType === 'window'}>&#160;Окно&#160;</Button>
+              <Button
+                onClick={this.rootTypeToggle('sector')}
+                active={rootType === 'sector'}
+              >
+                Сектор
+              </Button>
+              <Button
+                onClick={this.rootTypeToggle('window')}
+                active={rootType === 'window'}
+              >
+                &#160;Окно&#160;
+              </Button>
             </ButtonGroup>
           </div>
         </div>
@@ -242,8 +316,12 @@ class ColorInsert extends React.Component<IProps, IState> {
           {this.renderTools()}
         </SizeOptionsPanel>
         <ButtonGroup className="footer-button">
-          <Button onClick={this.saveColorInsertToJSON} color="primary">Сохранить</Button>
-          <Button onClick={this.loadColorInsertFromJSON} color="primary">Загрузить</Button>
+          <Button onClick={this.saveColorInsertToJSON} color="primary">
+            Сохранить
+          </Button>
+          <Button onClick={this.loadColorInsertFromJSON} color="primary">
+            Загрузить
+          </Button>
         </ButtonGroup>
       </div>
     );
@@ -266,6 +344,9 @@ const mapDispatchToProps = {
   setSideSize: sideEnteties.setSideSize,
 };
 
-const ColorInsertEditor = connect(mapStateToProps, mapDispatchToProps)(ColorInsert);
+const ColorInsertEditor = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ColorInsert);
 
 export default ColorInsertEditor;

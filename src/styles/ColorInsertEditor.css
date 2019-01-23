@@ -9,6 +9,9 @@ p, img {
   width: 850px;
   margin: 0 auto;
   padding: 0;
+}
+
+.app-container-border {
   border: 2px solid gray;
 }
 

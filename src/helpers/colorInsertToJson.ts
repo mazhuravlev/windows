@@ -18,7 +18,10 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
 
   const metaData = Base64.encode(JSON.stringify({ side, textureList, name, sectorList, textureType, windowType }));
 
-  if (name.length === 0) return alert('Введите имя!');
+  if (name.length === 0) {
+    alert('Введите имя!');
+    return null;
+  }
 
   const sectors = document.getElementsByClassName('preview-container-item');
   const sectorsParams = sectorsId.reduce((acc, sectorId) => {
@@ -58,7 +61,7 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
     .sort((a, b) => Number(a.Sector) > Number(b.Sector) ? 1 : -1);
 
   const result = { ID: id, Name: name, ...jsonSide, metaData, Sectors: jsonSectors };
-  console.log(JSON.stringify(result));
+  return result;
 };
 
 const prepareSideView = (side: ISideSize) => ({
