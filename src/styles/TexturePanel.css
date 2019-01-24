@@ -64,7 +64,7 @@
   background-color: gray;
   border: 2px solid gray;
   cursor: pointer;
-  background-size: auto;
+  background-size: contain;
 }
 
 .texture-panel-container .imgPreview img {
