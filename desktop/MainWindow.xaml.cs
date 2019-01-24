@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -33,18 +34,19 @@ namespace Bricks
                 }
             };
             Grid.Children.Add(browser);
-            var w = 859;
-            var h = 950;
+            var w = 880;
+            var h = 943;
             browser.Width = w;
             browser.Height = h;
-            Width = w + 0;
+            Width = w + 18;
             Height = h + 0;
             browser.JavascriptObjectRepository.Register("vasya", new Vasya());
             KeyDown += (sender, args) =>
             {
                 if(args.Key == Key.F12) browser.ShowDevTools();
             };
-            Background = Brushes.White;
+            Background = Brushes.Gray;
+            SizeChanged += (sender, args) => { Debug.WriteLine(args.NewSize); };
         }
     }
 

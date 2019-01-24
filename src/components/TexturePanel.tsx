@@ -14,12 +14,13 @@ import { IStore } from '../store';
 
 import NumberInput from './NumberInput';
 
-const getMeta = async (url: string | ArrayBuffer | null) => new Promise((resolve, reject) => {
-  const img = new Image();
-  img.onload = () => resolve({ width: img.width, height: img.height });
-  img.onerror = reject;
-  img.src = url as string;
-});
+const getMeta = async (url: string | ArrayBuffer | null) =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve({ width: img.width, height: img.height });
+    img.onerror = reject;
+    img.src = url as string;
+  });
 
 interface IProps {
   currentSector: number;
@@ -42,6 +43,8 @@ class Texture extends React.Component<IProps, IState> {
     previewListShow: false,
   };
 
+  public texturesRef = React.createRef<HTMLDivElement>();
+
   public handleKey = (key: string): void => {
     const { texture } = this.props;
     switch (key) {
@@ -60,6 +63,22 @@ class Texture extends React.Component<IProps, IState> {
       default:
         return;
     }
+  }
+
+  public clickListener = (e: MouseEvent) => {
+    if (this.state.previewListShow) {
+      const contains = this.texturesRef.current!.contains(e.target as Node);
+      console.log(contains);
+      if (!contains) this.setState({ previewListShow: false });
+    }
+  }
+
+  public componentDidMount() {
+    document.addEventListener('mouseup', this.clickListener);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('mouseup', this.clickListener);
   }
 
   public handleOffsetInput = (offsetType: string) => (value: number) => {
@@ -123,19 +142,31 @@ class Texture extends React.Component<IProps, IState> {
     this.setState({ previewListShow: !this.state.previewListShow });
   }
 
-  public handleHisoryListClick = (texture: ITexture) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handleHisoryListClick = (texture: ITexture) => (
+    event: React.FormEvent<HTMLDivElement>,
+  ) => {
     event.preventDefault();
     const { textureList, currentSector } = this.props;
-    const rootType = textureList[currentSector] ? textureList[currentSector].root : 'sector';
+    const rootType = textureList[currentSector]
+      ? textureList[currentSector].root
+      : 'sector';
     this.props.setTexture(texture);
-    this.props.addTextureItem({ ...texture, sectorId: this.props.currentSector, root: rootType });
+    this.props.addTextureItem({
+      ...texture,
+      sectorId: this.props.currentSector,
+      root: rootType,
+    });
   }
 
-  public handlePreviewListClick = (texture: ITexture) => (event: React.FormEvent<HTMLDivElement>) => {
+  public handlePreviewListClick = (texture: ITexture) => (
+    event: React.FormEvent<HTMLDivElement>,
+  ) => {
     event.stopPropagation();
     const { previewListHisory } = this.state;
     if (previewListHisory.length < 5) {
-      this.setState({ previewListHisory: [...this.state.previewListHisory, texture] });
+      this.setState({
+        previewListHisory: [...this.state.previewListHisory, texture],
+      });
       return;
     }
 
@@ -143,28 +174,38 @@ class Texture extends React.Component<IProps, IState> {
     this.setState({ previewListHisory: [...rest, texture] });
   }
 
-  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stopPropagation();
+  public handlePropagation = (event: React.FormEvent<HTMLDivElement>) =>
+    event.stopPropagation()
 
   public renderTextureList() {
     return (
-      <div className="texture-panel-container-item preview-list">
+      <div
+        className="texture-panel-container-item preview-list"
+        ref={this.texturesRef}
+      >
         <div className="preview-history-wrapper">
           <div className="preview-history">
             {this.state.previewListHisory.map((texture, i) => (
-              <div onClick={this.handleHisoryListClick(texture)} key={i} className="preview-history-item">
-                <img src={texture.url as string} alt=""/>
+              <div
+                onClick={this.handleHisoryListClick(texture)}
+                key={i}
+                className="preview-history-item"
+              >
+                <img src={texture.url as string} alt="" />
               </div>
             ))}
           </div>
         </div>
-        {
-          this.state.previewList.map((item, i) => (
-            <div onClick={this.handlePreviewListClick(item)}  className="preview-list-item" key={i} >
-              <img src={item.url as string} alt=""/>
-              <p>{item.fileName}</p>
-            </div>
-          ))
-        }
+        {this.state.previewList.map((item, i) => (
+          <div
+            onClick={this.handlePreviewListClick(item)}
+            className="preview-list-item"
+            key={i}
+          >
+            <img src={item.url as string} alt="" />
+            <p>{item.fileName}</p>
+          </div>
+        ))}
       </div>
     );
   }
@@ -172,9 +213,10 @@ class Texture extends React.Component<IProps, IState> {
   public renderKeyControlComponent() {
     return (
       <KeyboardEventHandler
-          handleKeys={['left', 'right', 'up', 'down']}
-          handleFocusableElements={true}
-          onKeyEvent={this.handleKey}/>
+        handleKeys={['left', 'right', 'up', 'down']}
+        handleFocusableElements={true}
+        onKeyEvent={this.handleKey}
+      />
     );
   }
 
@@ -183,32 +225,40 @@ class Texture extends React.Component<IProps, IState> {
     const imagePreviewUrl = texture.url as string;
     let imagePreview = null;
     if (imagePreviewUrl) {
-      imagePreview = (<img src={imagePreviewUrl} />);
+      imagePreview = <img src={imagePreviewUrl} />;
     } else {
-      imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+      imagePreview = (
+        <div className="previewText">Please select an Image for Preview</div>
+      );
     }
 
     return (
       <div onClick={this.handlePropagation} className="texture-panel-container">
         {this.renderKeyControlComponent()}
         <a className="texture-panel-container-item" href="#">
-          <img className="icon" src={texturesIconSvg} alt=""/>
+          <img className="icon" src={texturesIconSvg} alt="" />
         </a>
         <div className="custom-file">
           <input
-              className="custom-file-input"
-              type="file"
-              onChange={this.handleImageChange}
-              multiple={true}
-              required={true}
-              onClick={this.resetFileInput}
+            className="custom-file-input"
+            type="file"
+            onChange={this.handleImageChange}
+            multiple={true}
+            required={true}
+            onClick={this.resetFileInput}
           />
         </div>
-        <p className="texture-panel-container-item texture-name">Текстура: {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}</p>
+        <p className="texture-panel-container-item texture-name">
+          Текстура:{' '}
+          {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}
+        </p>
         <div className="texture-panel-container-item">
-          <div style={{ flexDirection: 'row', display: 'flex' }}>
-            <UncontrolledTooltip
-              target="horizontal-shift">Сдвиг по горизонтали</UncontrolledTooltip>
+          <div
+            style={{ flexDirection: 'row', display: 'flex', paddingLeft: 6 }}
+          >
+            <UncontrolledTooltip target="horizontal-shift">
+              Сдвиг по горизонтали
+            </UncontrolledTooltip>
             <NumberInput
               id="horizontal-shift"
               style={{ position: 'relative', marginLeft: '15px' }}
@@ -217,7 +267,9 @@ class Texture extends React.Component<IProps, IState> {
               max={10}
               onChange={this.handleOffsetInput('HOffset')}
             />
-            <UncontrolledTooltip target="vertical-shift">Сдвиг по вертикали</UncontrolledTooltip>
+            <UncontrolledTooltip target="vertical-shift">
+              Сдвиг по вертикали
+            </UncontrolledTooltip>
             <NumberInput
               id="vertical-shift"
               style={{ position: 'relative' }}
@@ -250,6 +302,9 @@ const mapDispatchToProps = {
   setTexture: textureEnteties.setTexture,
 };
 
-const TexturePanel = connect(mapStateToProps, mapDispatchToProps)(Texture);
+const TexturePanel = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Texture);
 
 export default TexturePanel;

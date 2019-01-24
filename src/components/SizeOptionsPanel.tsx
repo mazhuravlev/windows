@@ -17,7 +17,6 @@ interface IProps {
 }
 
 export class SizeOptionsPanel extends React.Component<IProps> {
-
   public handleInput = (sideName: string) => (value: number) => {
     const { setSideSize } = this.props;
     const newItem = { [sideName]: value };
@@ -56,21 +55,35 @@ export class SizeOptionsPanel extends React.Component<IProps> {
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'topSide', flexDirection: 'row' }}
-            sideName="top" />
+            sideName="top"
+          />
           <SideOption
             max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
             style={{ gridArea: 'rightSide', flexDirection: 'column' }}
-            sideName="right" />
+            sideName="right"
+          />
           <SideOption
             max={textureType === BRICK ? 8 : 6}
             side={this.props.side}
             handleInput={this.handleInput}
-            style={{ gridArea: 'bottomSide', flexDirection: 'row' }}
-            sideName="bottom" />
+            style={{
+              gridArea: 'bottomSide',
+              flexDirection: 'row',
+              marginTop: 6,
+            }}
+            sideName="bottom"
+          />
           {tools}
-          <div style={{ width: '720px', height: '600px', gridArea: 'preview', position: 'relative' }}>
+          <div
+            style={{
+              width: '720px',
+              height: '600px',
+              gridArea: 'preview',
+              position: 'relative',
+            }}
+          >
             {preview}
           </div>
         </div>
@@ -87,5 +100,8 @@ const mapDispatchToProps = {
   setSideSize: sideEnteties.setSideSize,
 };
 
-const SideSize = connect(mapStateToProps, mapDispatchToProps)(SizeOptionsPanel);
+const SideSize = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SizeOptionsPanel);
 export default SideSize;

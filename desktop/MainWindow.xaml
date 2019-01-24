@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WpfApplication1"
         mc:Ignorable="d"
         ResizeMode="NoResize"
+        BorderThickness="1"
         Title="Редактор цветной вставки">
     <StackPanel Name="Grid">
     </StackPanel>

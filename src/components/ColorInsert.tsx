@@ -210,7 +210,7 @@ class ColorInsert extends React.Component<IProps, IState> {
   public renderSavePanel() {
     return (
       <div className="save-panel">
-        <a href="#">
+        <a href="#" onClick={this.loadColorInsertFromJSON}>
           <img className="icon" src={saveIconSvg} alt="save" />
         </a>
         <p> Имя цветной вставки </p>
@@ -315,14 +315,14 @@ class ColorInsert extends React.Component<IProps, IState> {
           />
           {this.renderTools()}
         </SizeOptionsPanel>
-        <ButtonGroup className="footer-button">
-          <Button onClick={this.saveColorInsertToJSON} color="primary">
-            Сохранить
-          </Button>
-          <Button onClick={this.loadColorInsertFromJSON} color="primary">
-            Загрузить
-          </Button>
-        </ButtonGroup>
+        <Button
+          block={true}
+          onClick={this.saveColorInsertToJSON}
+          color="primary"
+          style={{ borderRadius: 0, marginBottom: 6 }}
+        >
+          Сохранить
+        </Button>
       </div>
     );
   }
