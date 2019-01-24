@@ -10,7 +10,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{135D657D-6D17-4F40-ACA1-E294F8E315A7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Bricks</RootNamespace>
+    <RootNamespace>Windows</RootNamespace>
     <AssemblyName>Windows</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

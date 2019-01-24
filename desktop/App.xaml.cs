@@ -1,4 +1,4 @@
-﻿namespace WpfApplication1
+﻿namespace Windows
 {
     /// <summary>
     /// Interaction logic for App.xaml

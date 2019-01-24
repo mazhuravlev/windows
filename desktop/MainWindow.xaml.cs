@@ -7,7 +7,7 @@ using CefSharp;
 using CefSharp.Wpf;
 using Microsoft.Win32;
 
-namespace Bricks
+namespace Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

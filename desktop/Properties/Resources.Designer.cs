@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WpfApplication1.Properties
+namespace Windows.Properties
 {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
