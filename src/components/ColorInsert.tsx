@@ -26,8 +26,10 @@ import { BRICK, DOUBLE_WINDOW, SECTOR_LIST, TILE, WINDOW } from '../static';
 import { IStore } from '../store';
 
 import basketIconSvg from '../static/icons/basketIcon.svg';
-import gridIconSvg from '../static/icons/gridIcon.svg';
-import saveIconSvg from '../static/icons/saveIcon.svg';
+import disable_gridPng from '../static/icons/disable_grid.png';
+import double_windowPng from '../static/icons/double_window.png';
+import enable_gridPng from '../static/icons/enable_grid.png';
+import single_windowPng from '../static/icons/single_window.png';
 
 import * as sectorEnteties from '../redux/currentSector';
 import * as sideEnteties from '../redux/side';
@@ -210,9 +212,6 @@ class ColorInsert extends React.Component<IProps, IState> {
   public renderSavePanel() {
     return (
       <div className="save-panel">
-        <a href="#" onClick={this.loadColorInsertFromJSON}>
-          <img className="icon" src={saveIconSvg} alt="save" />
-        </a>
         <p> Имя цветной вставки </p>
         <Input
           onChange={this.handleColorInsertName}
@@ -235,17 +234,26 @@ class ColorInsert extends React.Component<IProps, IState> {
           onClick={this.handleGridHide}
           className={`icon ${this.state.gridHide ? '' : 'grid-icon-hide'}`}
         >
-          <img src={gridIconSvg} alt="" />
+          <img
+            src={this.state.gridHide ? enable_gridPng : disable_gridPng}
+            alt=""
+          />
+        </a>
+        <a href="#" onClick={this.windowTypeToggle} className="icon">
+          <img
+            src={
+              this.state.windowType === DOUBLE_WINDOW
+                ? single_windowPng
+                : double_windowPng
+            }
+          />
         </a>
         <a
           href="#"
-          onClick={this.windowTypeToggle}
-          className={`window-icon ${
-            this.state.windowType === DOUBLE_WINDOW ? '' : 'double-window'
-          }`}
-        />
-        <a href="#" onClick={this.handleBasketClick} className="basket-icon">
-          <img className="icon" src={basketIconSvg} alt="" />
+          onClick={this.handleBasketClick}
+          className="basket-icon icon"
+        >
+          <img src={basketIconSvg} alt="" />
         </a>
       </div>
     );
@@ -316,10 +324,14 @@ class ColorInsert extends React.Component<IProps, IState> {
           {this.renderTools()}
         </SizeOptionsPanel>
         <Button
-          block={true}
+          onClick={this.loadColorInsertFromJSON}
+          style={{ borderRadius: 0, marginBottom: 6, width: 200, marginLeft: 63 }}>
+          Загрузить
+        </Button>
+        <Button
           onClick={this.saveColorInsertToJSON}
           color="primary"
-          style={{ borderRadius: 0, marginBottom: 6 }}
+          style={{ borderRadius: 0, marginBottom: 6, width: 416, marginLeft: 105 }}
         >
           Сохранить
         </Button>

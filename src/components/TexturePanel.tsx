@@ -2,15 +2,11 @@ import * as React from 'react';
 import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
-
-import '../styles/TexturePanel.css';
-
-import texturesIconSvg from '../static/icons/texturesIcon.svg';
-
 import { ISectorTexture, ITexture, ITextureList } from '../interface';
 import * as textureEnteties from '../redux/texture';
 import * as textureListEnteties from '../redux/textureList';
 import { IStore } from '../store';
+import '../styles/TexturePanel.css';
 
 import NumberInput from './NumberInput';
 
@@ -37,6 +33,8 @@ interface IState {
 }
 
 class Texture extends React.Component<IProps, IState> {
+  public fileInputRef = React.createRef<HTMLInputElement>();
+
   public state: IState = {
     previewList: [],
     previewListHisory: [],
@@ -68,7 +66,6 @@ class Texture extends React.Component<IProps, IState> {
   public clickListener = (e: MouseEvent) => {
     if (this.state.previewListShow) {
       const contains = this.texturesRef.current!.contains(e.target as Node);
-      console.log(contains);
       if (!contains) this.setState({ previewListShow: false });
     }
   }
@@ -110,9 +107,9 @@ class Texture extends React.Component<IProps, IState> {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < files.length; i += 1) {
-      const file = files[i];
+      const file: File = files[i];
+      if (this.state.previewList.some(x => x.fileName === file.name)) continue;
       const reader = new FileReader();
-
       reader.onloadend = async () => {
         const { currentSector } = this.props;
         const imgSize = await getMeta(reader.result);
@@ -178,6 +175,14 @@ class Texture extends React.Component<IProps, IState> {
   public handlePropagation = (event: React.FormEvent<HTMLDivElement>) =>
     event.stopPropagation()
 
+  public loadTexture = () => {
+    if (window.vasya) {
+      // todo: okno load file
+    } else {
+      this.fileInputRef.current!.click();
+    }
+  }
+
   public renderTextureList() {
     return (
       <div
@@ -196,6 +201,9 @@ class Texture extends React.Component<IProps, IState> {
               </div>
             ))}
           </div>
+        </div>
+        <div className="add-texture-button" onClick={this.loadTexture}>
+          добавить текстуру
         </div>
         {this.state.previewList.map((item, i) => (
           <div
@@ -224,38 +232,25 @@ class Texture extends React.Component<IProps, IState> {
   public render() {
     const { texture } = this.props;
     const imagePreviewUrl = texture.url as string;
-    // // let imagePreview = null;
-    // if (imagePreviewUrl) {
-    //   imagePreview = <img src={imagePreviewUrl} />;
-    // } else {
-    //   imagePreview = (
-    //     <div className="previewText">Please select an Image for Preview</div>
-    //   );
-    // }
-
     return (
       <div onClick={this.handlePropagation} className="texture-panel-container">
+        <input
+          ref={this.fileInputRef}
+          className="custom-file-input"
+          type="file"
+          onChange={this.handleImageChange}
+          multiple={true}
+          required={true}
+          onClick={this.resetFileInput}
+        />
         {this.renderKeyControlComponent()}
-        <a className="texture-panel-container-item" href="#">
-          <img className="icon" src={texturesIconSvg} alt="" />
-        </a>
-        <div className="custom-file">
-          <input
-            className="custom-file-input"
-            type="file"
-            onChange={this.handleImageChange}
-            multiple={true}
-            required={true}
-            onClick={this.resetFileInput}
-          />
-        </div>
         <p className="texture-panel-container-item texture-name">
           Текстура:{' '}
           {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}
         </p>
         <div className="texture-panel-container-item">
           <div
-            style={{ flexDirection: 'row', display: 'flex', paddingLeft: 6 }}
+            style={{ flexDirection: 'row', display: 'flex', paddingLeft: 46 }}
           >
             <UncontrolledTooltip target="horizontal-shift">
               Сдвиг по горизонтали

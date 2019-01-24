@@ -20,6 +20,7 @@ export class SizeOptionsPanel extends React.Component<IProps> {
   public handleInput = (sideName: string) => (value: number) => {
     const { setSideSize } = this.props;
     const newItem = { [sideName]: value };
+    console.log(sideName, newItem);
     if (this.checkPreviewOverflow(newItem)) return;
 
     setSideSize(newItem);
