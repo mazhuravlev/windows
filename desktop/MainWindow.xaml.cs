@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CefSharp;
@@ -16,8 +18,7 @@ namespace Windows
     {
         public MainWindow()
         {
-            Directory.CreateDirectory("strings");
-            var bricksUrl = Environment.GetEnvironmentVariable("WINDOWS_URL");
+            Directory.CreateDirectory("strings");  
             InitializeComponent();
             Cef.Initialize(new CefSettings{CefCommandLineArgs =
             {
@@ -25,30 +26,46 @@ namespace Windows
                 {"disable-gpu","1"},
                 {"disable-gpu-compositing","1"},
             }});
+            Background = Brushes.Gray;
+            SizeChanged += (sender, args) => { Debug.WriteLine(args.NewSize); };
+            Init();
+        }
+        
+        private void Init() {
+            var bricksUrl = Environment.GetEnvironmentVariable("WINDOWS_URL");
             var browser = new ChromiumWebBrowser()
             {
                 Address = string.IsNullOrEmpty(bricksUrl) ? "https://mazhuravlev.github.io/windows/" : bricksUrl,
-                BrowserSettings = new BrowserSettings
-                {
-                    
-                }
+                BrowserSettings = new BrowserSettings()
             };
-            Grid.Children.Add(browser);
             var w = 880;
             var h = 943;
             browser.Width = w;
             browser.Height = h;
             Width = w + 18;
-            Height = h + 0;
+            Grid.Children.Add(browser);
+            var screenHeight = SystemParameters.VirtualScreenHeight;
+            if (screenHeight >= h)
+            {
+                Height = h;
+                ScrollViewer.CanContentScroll = false;
+                ScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            }
+            else
+            {
+                Height = screenHeight - 100;
+                Top = 0;
+                ResizeMode = ResizeMode.CanResize;
+            }
+            
             browser.JavascriptObjectRepository.Register("vasya", new Vasya());
             KeyDown += (sender, args) =>
             {
                 if(args.Key == Key.F12) browser.ShowDevTools();
-            };
-            Background = Brushes.Gray;
-            SizeChanged += (sender, args) => { Debug.WriteLine(args.NewSize); };
+            };    
         }
     }
+   
 
     class Vasya
     {

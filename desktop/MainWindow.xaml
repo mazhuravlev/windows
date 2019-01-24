@@ -7,6 +7,7 @@
         ResizeMode="NoResize"
         BorderThickness="1"
         Title="Редактор цветной вставки">
-    <StackPanel Name="Grid">
-    </StackPanel>
+    <ScrollViewer Name="ScrollViewer">
+        <StackPanel Name="Grid" />
+    </ScrollViewer>
 </Window>

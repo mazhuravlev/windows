@@ -223,14 +223,14 @@ class Texture extends React.Component<IProps, IState> {
   public render() {
     const { texture } = this.props;
     const imagePreviewUrl = texture.url as string;
-    let imagePreview = null;
-    if (imagePreviewUrl) {
-      imagePreview = <img src={imagePreviewUrl} />;
-    } else {
-      imagePreview = (
-        <div className="previewText">Please select an Image for Preview</div>
-      );
-    }
+    // // let imagePreview = null;
+    // if (imagePreviewUrl) {
+    //   imagePreview = <img src={imagePreviewUrl} />;
+    // } else {
+    //   imagePreview = (
+    //     <div className="previewText">Please select an Image for Preview</div>
+    //   );
+    // }
 
     return (
       <div onClick={this.handlePropagation} className="texture-panel-container">
@@ -281,8 +281,12 @@ class Texture extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className="texture-panel-container-item">
-          <div onClick={this.handlePreviewClick} className="imgPreview">
-            {imagePreview}
+          <div
+            onClick={this.handlePreviewClick}
+            className="imgPreview"
+            style={{ backgroundImage: `url(${imagePreviewUrl})` }}
+          >
+            {!imagePreviewUrl ? 'Выберите текстуру' : null}
             {this.state.previewListShow ? this.renderTextureList() : null}
           </div>
         </div>
