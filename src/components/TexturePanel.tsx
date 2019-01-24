@@ -163,6 +163,7 @@ class Texture extends React.Component<IProps, IState> {
   ) => {
     event.stopPropagation();
     const { previewListHisory } = this.state;
+    if (previewListHisory.some(x => x.fileName === texture.fileName)) return;
     if (previewListHisory.length < 5) {
       this.setState({
         previewListHisory: [...this.state.previewListHisory, texture],
