@@ -175,9 +175,30 @@ class Texture extends React.Component<IProps, IState> {
   public handlePropagation = (event: React.FormEvent<HTMLDivElement>) =>
     event.stopPropagation()
 
-  public loadTexture = () => {
+  public loadTexture = async () => {
     if (window.vasya) {
-      // todo: okno load file
+      const texturesString = window.vasya.loadTextures();
+      if (texturesString != null) {
+        // tslint:disable-next-line:array-type
+        const textures = JSON.parse(texturesString) as {Filename: string, Data: string, Width: number, Height: number}[];
+        if (textures.length === 0) return;
+        // const { currentSector } = this.props;
+        const itextures: ITexture[] = [];
+        // tslint:disable-next-line:forin
+        for (const t in textures) {
+          const textureData = textures[t];
+          const imgSize = { width: textureData.Width, height: textureData.Height };
+          const texture = {
+            ...this.props.texture,
+            ...imgSize,
+            url: `data:image/png;base64,${textureData.Data}`,
+            fileName: textureData.Filename,
+          };
+          itextures.push(texture);
+        }
+        this.props.setTexture(itextures[0]);
+        this.setState({ previewList: [...this.state.previewList, ...itextures] });
+      }
     } else {
       this.fileInputRef.current!.click();
     }

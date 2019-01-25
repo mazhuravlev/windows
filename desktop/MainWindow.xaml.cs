@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +10,7 @@ using System.Windows.Media;
 using CefSharp;
 using CefSharp.Wpf;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace Windows
 {
@@ -18,20 +21,24 @@ namespace Windows
     {
         public MainWindow()
         {
-            Directory.CreateDirectory("strings");  
+            Directory.CreateDirectory("strings");
             InitializeComponent();
-            Cef.Initialize(new CefSettings{CefCommandLineArgs =
+            Cef.Initialize(new CefSettings
             {
-                {"disable-gpu-vsync","1"},
-                {"disable-gpu","1"},
-                {"disable-gpu-compositing","1"},
-            }});
+                CefCommandLineArgs =
+                {
+                    {"disable-gpu-vsync", "1"},
+                    {"disable-gpu", "1"},
+                    {"disable-gpu-compositing", "1"},
+                }
+            });
             Background = Brushes.Gray;
             SizeChanged += (sender, args) => { Debug.WriteLine(args.NewSize); };
             Init();
         }
-        
-        private void Init() {
+
+        private void Init()
+        {
             var bricksUrl = Environment.GetEnvironmentVariable("WINDOWS_URL");
             var browser = new ChromiumWebBrowser()
             {
@@ -57,15 +64,15 @@ namespace Windows
                 Top = 0;
                 ResizeMode = ResizeMode.CanResize;
             }
-            
+
             browser.JavascriptObjectRepository.Register("vasya", new Vasya());
             KeyDown += (sender, args) =>
             {
-                if(args.Key == Key.F12) browser.ShowDevTools();
-            };    
+                if (args.Key == Key.F12) browser.ShowDevTools();
+            };
         }
     }
-   
+
 
     class Vasya
     {
@@ -82,7 +89,7 @@ namespace Windows
                 //
             }
         }
-        
+
         public string LoadString(string key)
         {
             var file = Path.Combine("strings", key);
@@ -97,7 +104,7 @@ namespace Windows
                 return null;
             }
         }
-        
+
         public void Save(string json)
         {
             var saveFileDialog = new SaveFileDialog
@@ -108,8 +115,48 @@ namespace Windows
             };
             var result = saveFileDialog.ShowDialog();
             if (!result.HasValue || !result.Value) return;
-            _prevPath = Path.GetDirectoryName(saveFileDialog.FileName); 
+            _prevPath = Path.GetDirectoryName(saveFileDialog.FileName);
             File.WriteAllText(saveFileDialog.FileName, json);
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public string LoadTextures()
+        {
+            var openFileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = _prevPath,
+                Filter = "png files (*.png)|*.png",
+                Multiselect = true
+            };
+            var result = openFileDialog.ShowDialog();
+            if (!result.HasValue || !result.Value) return null;
+            var textures = openFileDialog.FileNames.Select(x =>
+            {
+                var imageBytes = File.ReadAllBytes(x);  
+                var base64String = Convert.ToBase64String(imageBytes);
+                using (var img = System.Drawing.Image.FromFile(x))
+                {
+                    return new TextureEntry
+                    {
+                        Filename = Path.GetFileName(x),
+                        Data = base64String,
+                        Width = img.Width,
+                        Height = img.Height
+                    };
+                }
+            }).ToList();
+            return JsonConvert.SerializeObject(textures);
+        }
+
+        internal class TextureEntry
+        {
+            public string Filename { get; set; }
+
+            public string Data { get; set; }
+            
+            public int Width { get; set; }
+            
+            public int Height { get; set; }
         }
 
         public string Load()

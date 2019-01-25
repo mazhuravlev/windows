@@ -3,6 +3,7 @@ declare interface Window {
   vasya: {
     save: (json: string) => void;
     load: () => string;
+    loadTextures: () => string;
   };
 }
 
