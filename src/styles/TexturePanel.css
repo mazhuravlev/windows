@@ -115,7 +115,7 @@
 }
 
 .texture-panel-container .preview-list .preview-history {
-  position: fixed;
+  /* position: fixed; */
   width: 278px;
   height: 60px;
   background-color: white;
