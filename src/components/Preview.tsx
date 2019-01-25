@@ -53,11 +53,11 @@ const getArrowForWindow = (selectedSector: number, textureList: ITextureList): b
   return textureList[selectedSector].root === 'window';
 };
 
-const getTextureOffset = (sectorId: number, textureList: ITextureList, side: ISideSize, window: IWindowParams): Partial<ISectorTexture> => {
+const getTextureOffset = (sectorId: number, textureList: ITextureList, side: ISideSize, window: IWindowParams, textureType: TextureType): Partial<ISectorTexture> => {
   if (textureList[sectorId]) {
     const texture = textureList[sectorId];
     return texture.root === 'window' ?
-      getOffsetInWindowAxes(texture, side, window)
+      getOffsetInWindowAxes(texture, side, window, textureType)
       : { VOffset: texture.VOffset, HOffset: texture.HOffset };
   }
   return { HOffset: 0, VOffset: 0 };
@@ -100,7 +100,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
           const sector = sectorList[sectorId];
           const sectorNumber = Number(sectorId);
           const size = getSectorSize(side, sectorNumber, windowType, sector7Width);
-          const textureOffset = getTextureOffset(sectorNumber, props.textureList, side, window);
+          const textureOffset = getTextureOffset(sectorNumber, props.textureList, side, window, textureType);
           return (
             <Sector
               key={sector.id}

@@ -19,72 +19,74 @@ export const getWindowSize = (windowType: WindowType, textureType: TextureType):
   return { width1, width2, height, spaceBetween };
 };
 
-export const getOffsetInWindowAxes = (texture: ISectorTexture, side: ISideSize, window: IWindowParams): Partial<ISectorTexture> => {
+export const getOffsetInWindowAxes = (texture: ISectorTexture, side: ISideSize, window: IWindowParams, textureType: TextureType): Partial<ISectorTexture> => {
   const { VOffset, HOffset } = texture;
+  const textureHSize = texture.width / 15;
+  const textureVSize = texture.height / 15;
   switch (texture.sectorId) {
     case 1: {
-      const x = - (side.leftWidth + side.leftMargin) + HOffset;
-      const y = window.height + side.topMargin + VOffset;
+      const x = - (textureHSize - (side.leftWidth + side.leftMargin)) + HOffset;
+      const y = - (textureVSize + window.height + side.topMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 2: {
-      const x = HOffset;
-      const y = window.height + side.topMargin + VOffset;
+      const x = - (textureHSize - side.leftMargin) + HOffset;
+      const y = - (textureVSize + window.height + side.topMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 3: {
-      const x = window.width1 + HOffset;
-      const y = window.height + side.topMargin + VOffset;
+      const x = - (textureHSize + window.width1) + HOffset;
+      const y = - (textureVSize + window.height + side.topMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 4: {
-      const x = window.width1 + window.spaceBetween + HOffset;
-      const y = window.height + side.topMargin + VOffset;
+      const x = - (textureHSize + window.width1 + window.spaceBetween) + HOffset;
+      const y = - (textureVSize + window.height + side.topMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 5: {
-      const x = window.width1 + window.spaceBetween + window.width2 + side.rightMargin + HOffset;
-      const y = window.height + side.topMargin + VOffset;
+      const x = - (textureHSize + window.width1 + window.spaceBetween + window.width2 + side.rightMargin) + HOffset;
+      const y = - (textureVSize + textureVSize + window.height + side.topMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 6: {
-      const x = - (side.leftWidth + side.leftMargin) + HOffset;
-      const y = VOffset;
+      const x = - (textureHSize - (side.leftWidth + side.leftMargin)) + HOffset;
+      const y = - (textureVSize - side.bottomMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 7: {
-      const x = window.width1 + HOffset;
-      const y = VOffset;
+      const x = - (textureHSize + window.width1) + HOffset;
+      const y = - (textureVSize - side.bottomMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 8: {
-      const x = window.width1 + window.spaceBetween + window.width2 + side.rightMargin + HOffset;
-      const y = VOffset;
+      const x = - (textureHSize + window.width1 + window.spaceBetween + window.width2 + side.rightMargin) + HOffset;
+      const y = - (textureVSize - side.bottomMargin) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 9: {
-      const x = - (side.leftWidth + side.leftMargin) + HOffset;
-      const y = - (side.bottomMargin + side.bottomWidth) + VOffset;
+      const x = - (textureHSize - (side.leftWidth + side.leftMargin)) + HOffset;
+      const y = - (textureVSize - (side.bottomMargin + side.bottomWidth)) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 10: {
-      const x = HOffset;
-      const y = - (side.bottomMargin + side.bottomWidth) + VOffset;
+      const x = - (textureHSize - side.leftMargin) + HOffset;
+      const y = - (textureVSize - (side.bottomMargin + side.bottomWidth)) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 11: {
-      const x = window.width1 + HOffset;
-      const y = - (side.bottomMargin + side.bottomWidth) + VOffset;
+      const x = - (textureHSize + window.width1) + HOffset;
+      const y = - (textureVSize - (side.bottomMargin + side.bottomWidth)) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 12: {
-      const x = window.width1 + window.spaceBetween + HOffset;
-      const y = - (side.bottomMargin + side.bottomWidth) + VOffset;
+      const x = - (textureHSize + window.width1 + window.spaceBetween) + HOffset;
+      const y = - (textureVSize - (side.bottomMargin + side.bottomWidth)) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     case 13: {
-      const x = window.width1 + window.spaceBetween + window.width2 + side.rightMargin + HOffset;
-      const y = - (side.bottomMargin + side.bottomWidth) + VOffset;
+      const x = - (textureHSize + window.width1 + window.spaceBetween + window.width2 + side.rightMargin) + HOffset;
+      const y = - (textureVSize - (side.bottomMargin + side.bottomWidth)) + VOffset;
       return { HOffset: x, VOffset: y };
     }
     default: return {};
