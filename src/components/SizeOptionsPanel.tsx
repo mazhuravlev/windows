@@ -17,25 +17,35 @@ interface IProps {
 }
 
 export class SizeOptionsPanel extends React.Component<IProps> {
-  public handleInput = (sideName: string) => (value: number) => {
-    const { setSideSize } = this.props;
-    const newItem = { [sideName]: value };
-    console.log(sideName, newItem);
-    if (this.checkPreviewOverflow(newItem)) return;
-
+  public handleInput = (resizeType: string) => (value: number) => {
+    const { setSideSize, side } = this.props;
+    const [, sideName, sizeType] = Array.prototype.slice.call(/(.+)(Width|Margin)/.exec(resizeType)) as string[];
+    const maxSideSize = this.props.textureType === 'brick' ? 8 : 6;
+    const sideWidth = side[`${sideName}Width`];
+    const sideMargin = side[`${sideName}Margin`];
+    let newItem: any;
+    if (sizeType === 'Width') {
+      if (value + sideMargin > maxSideSize) {
+        if (sideMargin > 0) {
+          newItem = { [`${sideName}Width`]: value,  [`${sideName}Margin`]: sideMargin - 1 };
+        } else {
+          newItem = { [`${sideName}Width`]: sideWidth,  [`${sideName}Margin`]: sideMargin };
+        }
+      } else {
+        newItem = { [`${sideName}Width`]: value };
+      }
+    } else {
+      if (value + sideWidth > maxSideSize) {
+        if (sideWidth > 0) {
+          newItem = { [`${sideName}Width`]: sideWidth - 1,  [`${sideName}Margin`]: value };
+        } else {
+          newItem = { [`${sideName}Width`]: sideWidth,  [`${sideName}Margin`]: sideMargin };
+        }
+      } else {
+        newItem = { [`${sideName}Margin`]: value };
+      }
+    }
     setSideSize(newItem);
-  }
-
-  public checkPreviewOverflow(newVal: Partial<ISideSize>) {
-    const { side, textureType } = this.props;
-    const newSide = { ...side, ...newVal };
-    const maxSideSize = textureType === 'brick' ? 8 : 6;
-    return [
-      newSide.leftMargin + newSide.leftWidth > maxSideSize,
-      newSide.topMargin + newSide.topWidth > maxSideSize,
-      newSide.rightMargin + newSide.rightWidth > maxSideSize,
-      newSide.bottomMargin + newSide.bottomWidth > maxSideSize,
-    ].some(item => item);
   }
 
   public render() {
