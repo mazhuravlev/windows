@@ -24,7 +24,7 @@ const SideOption = (props: IProps) => {
           id={`${sideName}-width`}
           style={{ position: 'relative' }}
           value={side[`${sideName}Width`]}
-          min={1}
+          min={0}
           max={props.max}
           onChange={handleInput(`${sideName}Width`)}
         />
