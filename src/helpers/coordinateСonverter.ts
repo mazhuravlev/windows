@@ -11,7 +11,7 @@ export const getWindowSize = (windowType: WindowType, textureType: TextureType):
   if (windowType === WINDOW) {
     width1 = textureType === BRICK ? 32 : 24,
     width2 = 0;
-    return { width1, width2, height, spaceBetween };
+    return { width1, width2, height, spaceBetween: 0 };
   }
   width1 = textureType === BRICK ? 20 : 15;
   width2 = textureType === BRICK ? 8 : 6;
