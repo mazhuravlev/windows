@@ -44,7 +44,7 @@ const getPreviewPosition = (side: ISideSize, step: number) => {
 
 const getArrowForSector = (selectedSector: number, sectorId: number, textureList: ITextureList): string => {
   if (selectedSector !== sectorId) return '';
-  if (!textureList[selectedSector]) return 'arrow';
+  if (!textureList[selectedSector]) return '';
   return textureList[selectedSector].root === 'sector' ? 'arrow' : '';
 };
 

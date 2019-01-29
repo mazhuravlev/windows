@@ -83,7 +83,7 @@ class Texture extends React.Component<IProps, IState> {
         const textureItem: ISectorTexture = {
           ...texture,
           sectorId: currentSector,
-          root: 'sector',
+          root: 'window',
         };
         if (currentSector > 0) {
           this.props.addTextureItem(textureItem);
@@ -107,7 +107,7 @@ class Texture extends React.Component<IProps, IState> {
     const { textureList, currentSector } = this.props;
     const rootType = textureList[currentSector]
       ? textureList[currentSector].root
-      : 'sector';
+      : 'window';
     this.props.setTexture(texture);
     this.props.addTextureItem({
       ...texture,
@@ -179,7 +179,7 @@ class Texture extends React.Component<IProps, IState> {
                 key={i}
                 className="preview-history-item"
               >
-                <img src={texture.url as string} alt="" />
+                <div style={{ backgroundImage: `url(${texture.url as string})`, backgroundSize: 'contain', width: '100%', height: '100%' }} />
               </div>
             ))}
           </div>

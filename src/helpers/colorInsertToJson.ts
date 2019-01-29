@@ -29,11 +29,13 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
       [sectorId]: {
         width: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientWidth, textureType),
         height: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientHeight, textureType),
-        root: textureList[sectorId] ? textureList[sectorId].root : 'sector',
+        root: textureList[sectorId] ? textureList[sectorId].root : 'window',
       },
     };
     return { ...acc, ...newItem };
-  },                                     {});
+  },                                     {
+
+  });
 
   const windowParams = getWindowSize(windowType, textureType);
 

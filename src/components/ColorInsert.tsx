@@ -46,7 +46,7 @@ import TexturePanel from './TexturePanel';
 interface IState {
   sectorList: ISectorList;
   textureType: TextureType;
-  rootType: string;
+  rootType: RootType;
   windowType: WindowType;
   gridHide: boolean;
   colorInsertName: string;
@@ -73,7 +73,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     windowType: WINDOW,
     gridHide: false,
     colorInsertName: '',
-    rootType: 'sector',
+    rootType: 'window',
   };
 
   public handleGridHide = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -139,7 +139,7 @@ class ColorInsert extends React.Component<IProps, IState> {
         ...this.props.texture,
         VOffset: 0,
         HOffset: 0,
-        root: 'sector',
+        root: 'window',
       });
     }
   }
@@ -252,7 +252,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     const { currentSector, textureList, isWindow } = this.props;
     const rootType = textureList[currentSector]
       ? textureList[currentSector].root
-      : 'sector';
+      : 'window';
     return (
       <div
         className={classnames('app-container', {

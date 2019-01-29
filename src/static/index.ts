@@ -1,10 +1,10 @@
 import { ISectorList } from '../interface';
 
-const initSectorList = () : ISectorList => {
+const initSectorList = (): ISectorList => {
   let initList: ISectorList = {};
 
   for (let i = 1; i <= 13; i += 1) {
-    initList = { ...initList, [i]: { id: i, root: 'sector' } };
+    initList = { ...initList, [i]: { id: i, root: 'window' } };
   }
   return initList;
 };
