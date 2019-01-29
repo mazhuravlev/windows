@@ -1,5 +1,4 @@
 .texture-panel-container {
-  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -51,20 +50,17 @@
 } */
 
 .texture-panel-container .imgPreview {
-  position: absolute;
-  left: 530px;
-  bottom: -48px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 15px;
-  height: 180px;
-  width: 180px;
-  background-color: gray;
-  border: 2px solid gray;
-  cursor: pointer;
-  background-size: contain;
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 120px;
+    background-color: gray;
+    border: 2px solid gray;
+    cursor: pointer;
+    background-size: contain;
 }
 
 .texture-panel-container .imgPreview img {
@@ -81,8 +77,8 @@
 
 .texture-panel-container .preview-list {
   position: absolute;
-  left: -70%;
-  top: 102%;
+  top: 100%;
+  right: 0;
   z-index: 21;
 
   width: 300px;
@@ -149,6 +145,8 @@
 }
 
 .texture-panel-container .preview-list p {
+  max-width: 200px;
+  white-space: nowrap;
   display: inline-block;
   line-height: 2;
   margin-left: 5px;
@@ -169,7 +167,8 @@
   background-color: whitesmoke;
 }
 
-.texture-panel-container .preview-list .preview-list-item img {
+.texture-panel-container .preview-list .preview-list-item .img {
+  background-size: contain;
   display: inline-block;
   padding: 1px;
   margin: 1px;

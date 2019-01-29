@@ -1,11 +1,11 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import classnames from 'classnames';
 import { Base64 } from 'js-base64';
 import * as _ from 'lodash';
 import * as React from 'react';
+import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup, Input } from 'reactstrap';
-
-import 'bootstrap/dist/css/bootstrap.css';
+import { Button, ButtonGroup, Input, UncontrolledTooltip } from 'reactstrap';
 import '../styles/ColorInsertEditor.css';
 import '../styles/Preview.css';
 import '../styles/Window.css';
@@ -38,6 +38,7 @@ import * as textureListEnteties from '../redux/textureList';
 
 import { checkOverSize, isEmptyTexture } from '../helpers';
 import colorInsertToJson from '../helpers/colorInsertToJson';
+import NumberInput from './NumberInput';
 import Preview from './Preview';
 import SizeOptionsPanel from './SizeOptionsPanel';
 import TexturePanel from './TexturePanel';
@@ -88,7 +89,7 @@ class ColorInsert extends React.Component<IProps, IState> {
     if (checkOverSize(this.props.side, value)) {
       alert(
         `Недопустимый размер сектора! Максимально допустимый размер "${
-          value === BRICK ? 8 : 6
+        value === BRICK ? 8 : 6
         }"`,
       );
       return;
@@ -209,19 +210,6 @@ class ColorInsert extends React.Component<IProps, IState> {
     });
   }
 
-  public renderSavePanel() {
-    return (
-      <div className="save-panel">
-        <p> Имя цветной вставки </p>
-        <Input
-          onChange={this.handleColorInsertName}
-          type="text"
-          value={this.state.colorInsertName}
-        />
-      </div>
-    );
-  }
-
   public renderTools() {
     return (
       <div
@@ -272,31 +260,43 @@ class ColorInsert extends React.Component<IProps, IState> {
         })}
         onClick={this.ResetFocus}
       >
-        <div className="container-item options">
+        <KeyboardEventHandler
+          handleKeys={['left', 'right', 'up', 'down']}
+          handleFocusableElements={true}
+          onKeyEvent={this.handleKey}
+        />
+        {/* <div className="container-item options">
           {this.renderSavePanel()}
           <div className="control-button-panel">
-            <div className="type-toggle">
-              <p>Тип текстуры:</p>
-              <ButtonGroup className="texture-type-toggle">
-                <Button
-                  onClick={this.textureTypeToggle(BRICK)}
-                  active={textureType === BRICK}
-                >
-                  Кирпич
-                </Button>
-                <Button
-                  onClick={this.textureTypeToggle(TILE)}
-                  active={textureType === TILE}
-                >
-                  Плитка
-                </Button>
-              </ButtonGroup>
-            </div>
           </div>
-          <TexturePanel />
-          <div onClick={this.handlePropagation} className="type-toggle">
-            <p>Параметры привязки:</p>
-            <ButtonGroup className="root-type-toggle">
+        </div> */}
+        <div className="tools-panel">
+          <p>Имя цветной вставки </p>
+          <Input
+            style={{ gridArea: 'a2', width: 250 }}
+            onChange={this.handleColorInsertName}
+            type="text"
+            value={this.state.colorInsertName}
+          />
+          <p className="otdelka-type">Тип отделки</p>
+          <ButtonGroup className="texture-type-toggle" style={{ gridArea: 'a4' }}>
+            <Button
+              onClick={this.textureTypeToggle(BRICK)}
+              active={textureType === BRICK}
+            >
+              Кирпич
+              </Button>
+            <Button
+              onClick={this.textureTypeToggle(TILE)}
+              active={textureType === TILE}
+            >
+              Плитка
+              </Button>
+          </ButtonGroup>
+          <p style={{ gridArea: 'b1' }}>Сдвиг</p>
+          <p style={{ gridArea: 'b3', position: 'relative', top: 7 }}>Привязка</p>
+          <div onClick={this.handlePropagation} className="root-type-toggle">
+            <ButtonGroup>
               <Button
                 onClick={this.rootTypeToggle('sector')}
                 active={rootType === 'sector'}
@@ -310,6 +310,36 @@ class ColorInsert extends React.Component<IProps, IState> {
                 &#160;Окно&#160;
               </Button>
             </ButtonGroup>
+          </div>
+          <p className="texture-name">{this.props.texture ? this.props.texture.fileName : null}</p>
+          <div style={{ gridArea: 'c2 / c2 / c4 / c2' }}>
+            <TexturePanel />
+          </div>
+          <div className="shift-settings" onClick={this.handlePropagation}>
+            <UncontrolledTooltip target="horizontal-shift">
+              Сдвиг по горизонтали
+            </UncontrolledTooltip>
+            <NumberInput
+              id="horizontal-shift"
+              style={{}}
+              value={this.props.texture.HOffset}
+              min={-10}
+              max={10}
+              // tslint:disable-next-line:jsx-no-bind
+              onChange={this.handleOffsetInput('HOffset').bind(this)}
+            />
+            <UncontrolledTooltip target="vertical-shift">
+              Сдвиг по вертикали
+            </UncontrolledTooltip>
+            <NumberInput
+              id="vertical-shift"
+              style={{ position: 'relative' }}
+              value={this.props.texture.VOffset}
+              min={-10}
+              max={10}
+              // tslint:disable-next-line:jsx-no-bind
+              onChange={this.handleOffsetInput('VOffset').bind(this)}
+            />
           </div>
         </div>
         <SizeOptionsPanel {...this.state}>
@@ -331,12 +361,50 @@ class ColorInsert extends React.Component<IProps, IState> {
         <Button
           onClick={this.saveColorInsertToJSON}
           color="primary"
-          style={{ borderRadius: 0, marginBottom: 6, width: 416, marginLeft: 105 }}
+          style={{ borderRadius: 0, marginBottom: 6, width: 513, marginLeft: 10 }}
         >
           Сохранить
         </Button>
       </div>
     );
+  }
+
+  private handleOffsetInput = (offsetType: string) => (value: number) => {
+    const { textureList, currentSector } = this.props;
+    if (currentSector === 0 || !textureList[currentSector]) return;
+
+    const texture = {
+      ...this.props.texture,
+      [offsetType]: Math.abs(value) > 20 ? 0 : value,
+    };
+
+    const textureItem: ISectorTexture = {
+      ...texture,
+      sectorId: this.props.currentSector,
+      root: textureList[currentSector].root,
+    };
+    this.props.addTextureItem(textureItem);
+    this.props.setTexture(texture);
+  }
+
+  private handleKey = (key: string): void => {
+    const { texture } = this.props;
+    switch (key) {
+      case 'down':
+        this.handleOffsetInput('VOffset')(texture.VOffset - 1);
+        break;
+      case 'up':
+        this.handleOffsetInput('VOffset')(texture.VOffset + 1);
+        break;
+      case 'right':
+        this.handleOffsetInput('HOffset')(texture.HOffset + 1);
+        break;
+      case 'left':
+        this.handleOffsetInput('HOffset')(texture.HOffset - 1);
+        break;
+      default:
+        return;
+    }
   }
 }
 

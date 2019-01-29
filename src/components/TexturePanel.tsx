@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as KeyboardEventHandler from 'react-keyboard-event-handler';
 import { connect } from 'react-redux';
 import { UncontrolledTooltip } from 'reactstrap';
 import { ISectorTexture, ITexture, ITextureList } from '../interface';
@@ -43,26 +42,6 @@ class Texture extends React.Component<IProps, IState> {
 
   public texturesRef = React.createRef<HTMLDivElement>();
 
-  public handleKey = (key: string): void => {
-    const { texture } = this.props;
-    switch (key) {
-      case 'down':
-        this.handleOffsetInput('VOffset')(texture.VOffset - 1);
-        break;
-      case 'up':
-        this.handleOffsetInput('VOffset')(texture.VOffset + 1);
-        break;
-      case 'right':
-        this.handleOffsetInput('HOffset')(texture.HOffset + 1);
-        break;
-      case 'left':
-        this.handleOffsetInput('HOffset')(texture.HOffset - 1);
-        break;
-      default:
-        return;
-    }
-  }
-
   public clickListener = (e: MouseEvent) => {
     if (this.state.previewListShow) {
       const contains = this.texturesRef.current!.contains(e.target as Node);
@@ -76,24 +55,6 @@ class Texture extends React.Component<IProps, IState> {
 
   public componentWillUnmount() {
     document.removeEventListener('mouseup', this.clickListener);
-  }
-
-  public handleOffsetInput = (offsetType: string) => (value: number) => {
-    const { textureList, currentSector } = this.props;
-    if (currentSector === 0 || !textureList[currentSector]) return;
-
-    const texture = {
-      ...this.props.texture,
-      [offsetType]: Math.abs(value) > 20 ? 0 : value,
-    };
-
-    const textureItem: ISectorTexture = {
-      ...texture,
-      sectorId: this.props.currentSector,
-      root: textureList[currentSector].root,
-    };
-    this.props.addTextureItem(textureItem);
-    this.props.setTexture(texture);
   }
 
   public resetFileInput = (event: any) => {
@@ -180,7 +141,7 @@ class Texture extends React.Component<IProps, IState> {
       const texturesString = window.vasya.loadTextures();
       if (texturesString != null) {
         // tslint:disable-next-line:array-type
-        const textures = JSON.parse(texturesString) as {Filename: string, Data: string, Width: number, Height: number}[];
+        const textures = JSON.parse(texturesString) as { Filename: string, Data: string, Width: number, Height: number }[];
         if (textures.length === 0) return;
         // const { currentSector } = this.props;
         const itextures: ITexture[] = [];
@@ -232,21 +193,11 @@ class Texture extends React.Component<IProps, IState> {
             className="preview-list-item"
             key={i}
           >
-            <img src={item.url as string} alt="" />
+            <div className="img" style={{ backgroundImage: `url(${item.url as string})` }} />
             <p>{item.fileName}</p>
           </div>
         ))}
       </div>
-    );
-  }
-
-  public renderKeyControlComponent() {
-    return (
-      <KeyboardEventHandler
-        handleKeys={['left', 'right', 'up', 'down']}
-        handleFocusableElements={true}
-        onKeyEvent={this.handleKey}
-      />
     );
   }
 
@@ -264,39 +215,6 @@ class Texture extends React.Component<IProps, IState> {
           required={true}
           onClick={this.resetFileInput}
         />
-        {this.renderKeyControlComponent()}
-        <p className="texture-panel-container-item texture-name">
-          Текстура:{' '}
-          {texture.fileName ? texture.fileName : 'Текстура не выбрана!'}
-        </p>
-        <div className="texture-panel-container-item">
-          <div
-            style={{ flexDirection: 'row', display: 'flex', paddingLeft: 46 }}
-          >
-            <UncontrolledTooltip target="horizontal-shift">
-              Сдвиг по горизонтали
-            </UncontrolledTooltip>
-            <NumberInput
-              id="horizontal-shift"
-              style={{ position: 'relative', marginLeft: '15px' }}
-              value={this.props.texture.HOffset}
-              min={-10}
-              max={10}
-              onChange={this.handleOffsetInput('HOffset')}
-            />
-            <UncontrolledTooltip target="vertical-shift">
-              Сдвиг по вертикали
-            </UncontrolledTooltip>
-            <NumberInput
-              id="vertical-shift"
-              style={{ position: 'relative' }}
-              value={this.props.texture.VOffset}
-              min={-10}
-              max={10}
-              onChange={this.handleOffsetInput('VOffset')}
-            />
-          </div>
-        </div>
         <div className="texture-panel-container-item">
           <div
             onClick={this.handlePreviewClick}

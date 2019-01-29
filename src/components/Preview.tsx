@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sector from './Sector';
 import Window from './Window';
 
-import { getGridItemSize, getSectorSize } from '../helpers';
+import { getGridItemStyle, getSectorSize } from '../helpers';
 import { getOffsetInWindowAxes, getWindowSize } from '../helpers/coordinateСonverter';
 import { ISectorList, ISectorTexture, ISideSize, ITextureList, IWindowParams, TextureType, WindowType } from '../interface';
 import { BRICK, BRICK_SIZE, DOUBLE_WINDOW, PREVIEW_MAX_SECTOR_SIZE as PREVIEW_MAX_MARGIN, TILE, TILE_SIZE, WINDOW } from '../static';
@@ -120,7 +120,7 @@ const Preview = (props: IProps & React.HTMLProps<HTMLDivElement>) => {
             >
               <div
                 className={`${props.gridHide ? 'grid-item' : `sector${sectorNumber}-grid-mask grid-item`} `}
-                style={getGridItemSize(sectorNumber, side, windowType, step, props.gridHide)}
+                style={getGridItemStyle(sectorNumber, side, windowType, step, props.gridHide)}
               >
                 {''}
               </div>

@@ -17,7 +17,7 @@ const handlePropagation = (event: React.FormEvent<HTMLDivElement>) => event.stop
 const SideOption = (props: IProps) => {
   const { side, sideName, handleInput } = props;
   return (
-    <div onClick={handlePropagation} style={{ paddingLeft: 8, ...props.style }} className="side-options-container">
+    <div onClick={handlePropagation} style={{ ...props.style }} className="side-options-container">
       <div className="side-options-container-item">
         <UncontrolledTooltip target={`${sideName}-width`}>Ширина</UncontrolledTooltip>
         <NumberInput

@@ -2,7 +2,7 @@
 .container-window-options {
   position: relative;
   display: grid;
-  grid-template-columns: auto 720px auto;
+  grid-template-columns: 65px 720px 65px;
   grid-template-rows: auto 600px auto;
   grid-template-areas:
     ". topSide tools"
@@ -12,7 +12,7 @@
     align-items: center;
   
   margin: 0 auto;
-  margin-bottom: 5px;  
+  margin-bottom: 5px;
 }
 
 /* Side options style */

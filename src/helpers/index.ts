@@ -4,7 +4,7 @@ import { BRICK, BRICK_SIZE, TILE_SIZE, WINDOW } from '../static';
 export const buildSizeStyleObj = (sizeObj: INumObjType, step: number) => {
   return Object.keys(sizeObj).reduce((acc, key) =>
     ({ ...acc, [key]: `${sizeObj[key] * step}px` }
-  ),                                 {});
+    ),                               {});
 };
 
 export const getSectorSize = (side: ISideSize, sector: number, windowType: WindowType, sector7Width: number): INumObjType => {
@@ -57,7 +57,7 @@ export const getSectorSize = (side: ISideSize, sector: number, windowType: Windo
   }
 };
 
-export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType: string, step: number, hide: boolean): ISize => {
+export const getGridItemStyle = (sector: number, sideSize: ISideSize, windowType: string, step: number, hide: boolean): any => {
   if (hide) return { width: 0, height: 0 };
   switch (sector) {
     case 1: {
@@ -75,12 +75,12 @@ export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType:
     case 3: {
       const width = 60;
       const height = 120 - sideSize.topMargin * step;
-      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+      return windowType === WINDOW ? { width: 0, height: 0, border: 'none' } : { width, height };
     }
     case 4: {
       const width = 120 + sideSize.rightMargin * step;
       const height = 120 - sideSize.topMargin * step;
-      return windowType === WINDOW ? { width: 0, height: 0 } : { width, height };
+      return windowType === WINDOW ? { width: 0, height: 0, border: 'none' } : { width, height };
     }
     case 5: {
       const width = 120 - sideSize.rightMargin * step;
@@ -110,8 +110,8 @@ export const getGridItemSize = (sector: number, sideSize: ISideSize, windowType:
     case 10: {
       const height = 120 - sideSize.bottomMargin * step;
       const width = windowType === WINDOW ?
-      480 + (sideSize.leftMargin + sideSize.rightMargin) * step
-      : 300 + sideSize.leftMargin * step;
+        480 + (sideSize.leftMargin + sideSize.rightMargin) * step
+        : 300 + sideSize.leftMargin * step;
       return { width, height };
     }
     case 11: {
