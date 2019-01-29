@@ -25,11 +25,12 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
 
   const sectors = document.getElementsByClassName('preview-container-item');
   const sectorsParams = sectorsId.reduce((acc, sectorId) => {
-    const newItem = { [sectorId]: {
-      width: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientWidth, textureType),
-      height: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientHeight, textureType),
-      root: textureList[sectorId] ? textureList[sectorId].root : 'sector',
-    },
+    const newItem = {
+      [sectorId]: {
+        width: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientWidth, textureType),
+        height: getSectorSizeInMM(sectors[Number(sectorId) - 1].clientHeight, textureType),
+        root: textureList[sectorId] ? textureList[sectorId].root : 'sector',
+      },
     };
     return { ...acc, ...newItem };
   },                                     {});
@@ -75,7 +76,7 @@ const prepareSideView = (side: ISideSize) => ({
   BottomWidht: String(side.bottomWidth),			// ширина снизу
 });
 
-const shiftSectorName = (name: string) => String({ 1: 9, 2: 10, 3: 11, 4: 12, 5: 13, 6: 6, 7: 7, 8: 8, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5 }[name]);
+const shiftSectorName = (name: string) => String({ 1: 2, 2: 5, 3: 8, 4: 11, 5: 14, 6: 1, 7: 7, 8: 13, 9: 0, 10: 3, 11: 6, 12: 9, 13: 12 }[name]);
 
 const prepareSectorApiView = (sector: ISectorParams) => {
   const sectorName = shiftSectorName(sector.sectorName);
