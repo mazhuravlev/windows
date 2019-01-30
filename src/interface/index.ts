@@ -31,7 +31,7 @@ export interface ISectorTexture extends ITexture {
 }
 
 export interface ITextureList {
-  [secotId: number]: ISectorTexture;
+  [sectorId: number]: ISectorTexture;
 }
 
 export interface ISize {

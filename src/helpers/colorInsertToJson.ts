@@ -2,7 +2,7 @@ import { Base64 } from 'js-base64';
 import * as uuid from 'uuid/v4';
 
 import { getSectorSizeInMM } from '.';
-import { ISectorList, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
+import { ISectorList, ISectorTexture, ISideSize, ITexture, ITextureList, RootType, TextureType, WindowType } from '../interface';
 import { getOffsetInWindowAxes, getWindowSize } from './coordinateСonverter';
 
 interface ISectorParams extends ITexture {
@@ -60,7 +60,7 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
   });
 
   const jsonSide = prepareSideView(side);
-  const jsonSectors = sectorParams.map(sector => prepareSectorApiView(sector))
+  const jsonSectors = sectorParams.map(sector => prepareSectorApiView(sector, textureList, textureType))
     .sort((a, b) => Number(a.Sector) > Number(b.Sector) ? 1 : -1);
 
   const result = { ID: id, Name: name, ...jsonSide, metaData, Sectors: jsonSectors };
@@ -80,13 +80,15 @@ const prepareSideView = (side: ISideSize) => ({
 
 const shiftSectorName = (name: string) => String({ 1: 2, 2: 5, 3: 8, 4: 11, 5: 14, 6: 1, 7: 7, 8: 13, 9: 0, 10: 3, 11: 6, 12: 9, 13: 12 }[name]);
 
-const prepareSectorApiView = (sector: ISectorParams) => {
+const prepareSectorApiView = (sector: ISectorParams, textureList: ITextureList, textureType: TextureType) => {
+  const texture = textureList[sector.sectorName] as ISectorTexture;
   const sectorName = shiftSectorName(sector.sectorName);
+  const x = textureType === 'brick' ? 75 : 100;
   return {
     Sector: sectorName,			// номер сектора
     Texture: sector.fileName,	// имя текстуры
-    SizeX: String(sector.width),		// ширина текстуры на модели
-    SizeY: String(sector.height),		// высота текстуры на модели
+    SizeX: String(texture ? texture.width / 15 * x : 0),		// ширина текстуры на модели
+    SizeY: String(texture ? texture.height / 15 * x : 0),		// высота текстуры на модели
     ShiftX: String(sector.HOffset),			// сдвиг по горизонтали
     ShiftY: String(sector.VOffset),			// сдвиг по вертикали
     Snap: sector.root === 'window' ? '4' : '5',			// привязка (сектор - 5 / окно - 4)
