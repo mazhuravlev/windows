@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { buildSizeStyleObj } from '../helpers';
-// import { getOffsetInWindowAxes } from '../helpers/coordinateСonverter';
 import { INumObjType, ISector, ISectorTexture, IStyleObj, ITexture, ITextureList } from '../interface';
 import { BRICK, BRICK_SIZE, TILE_SIZE } from '../static';
 

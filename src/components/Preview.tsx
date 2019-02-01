@@ -57,7 +57,7 @@ const getTextureOffset = (sectorId: number, textureList: ITextureList, side: ISi
   if (textureList[sectorId]) {
     const texture = textureList[sectorId];
     return texture.root === 'window' ?
-      getOffsetInWindowAxes(texture, side, window, textureType)
+      getOffsetInWindowAxes(texture, side, window, textureType, false)
       : { VOffset: texture.VOffset, HOffset: texture.HOffset };
   }
   return { HOffset: 0, VOffset: 0 };

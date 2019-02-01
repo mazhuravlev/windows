@@ -19,8 +19,11 @@ export const getWindowSize = (windowType: WindowType, textureType: TextureType):
   return { width1, width2, height, spaceBetween };
 };
 
-export const getOffsetInWindowAxes = (texture: ISectorTexture, side: ISideSize, window: IWindowParams, textureType: TextureType): Partial<ISectorTexture> => {
+export const getOffsetInWindowAxes = (texture: ISectorTexture, side: ISideSize, window: IWindowParams, textureType: TextureType, isExport: boolean): Partial<ISectorTexture> => {
   const { VOffset, HOffset } = texture;
+  if (isExport && VOffset === 0 && HOffset === 0) {
+    return { HOffset: 0, VOffset: 0 };
+  }
   const textureHSize = texture.width / 15;
   const textureVSize = texture.height / 15;
   switch (texture.sectorId) {

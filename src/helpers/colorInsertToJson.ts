@@ -43,7 +43,7 @@ export default (side: ISideSize, textureList: ITextureList, name: string, sector
     const texture = textureList[sectorId];
     if (texture) {
       if (textureList[sectorId].root === 'window') {
-        const offset = getOffsetInWindowAxes(texture, side, windowParams, textureType);
+        const offset = getOffsetInWindowAxes(texture, side, windowParams, textureType, true);
         return { sectorName: sectorId, ...texture, ...offset, ...sectorsParams[sectorId] };
       }
       return { sectorName: sectorId, ...texture, ...sectorsParams[sectorId] };
